@@ -1,7 +1,7 @@
 from tkinter import CASCADE
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from season import Season
+
 
 ROUND_TYPE_CHOICES = [
     ('I', 'Interview'),
@@ -13,7 +13,7 @@ ROUND_TYPE_CHOICES = [
 class Round(models.Model):
     name = models.CharField(max_length=200)
     type = models.CharField(max_length=1, choices=ROUND_TYPE_CHOICES)
-    season = models.ForeignKey(Season, on_delete=models.CASCADE)
+    season = models.ForeignKey('Season', on_delete=models.CASCADE)
     dates = ArrayField(
         models.DateField(),
         blank=True

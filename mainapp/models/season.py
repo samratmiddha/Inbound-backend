@@ -1,5 +1,5 @@
 from django.db import models
-from .user import User, ROLE_CHOICES
+from .user import  ROLE_CHOICES
 import datetime
 
 
