@@ -8,4 +8,4 @@ from .round_info import Round_Info
 from .round import Round
 from .season import Season
 from .section import Section
-from sectional_marks import Sectional_Marks
+from .sectional_marks import Sectional_Marks

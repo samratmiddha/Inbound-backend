@@ -15,11 +15,11 @@ class Candidate(models.Model):
     mobile_no = models.CharField(max_length=14, blank=True, null=True)
     season = models.ForeignKey('Season', on_delete=models.CASCADE)
     CG = models.FloatField(blank=True, null=True)
-    year = models.IntegerChoices(default=1)
+    year = models.IntegerField(default=1)
     enrollment_number = models.CharField(max_length=8, blank=True, null=True)
 
     candidate_from = models.CharField(
         max_length=1, choices=CANDIDATE_FROM_CHOICES)
 
     rounds = models.ManyToManyField(
-        'Round', through='Round_Info', on_delete=models.CASCADE, blank=True)
+        'Round', through='Round_Info')
