@@ -17,6 +17,7 @@ class Candidate(models.Model):
     CG = models.FloatField(blank=True, null=True)
     year = models.IntegerField(default=1)
     enrollment_number = models.CharField(max_length=8, blank=True, null=True)
+    is_exterminated = models.BooleanField(default=False)
 
     candidate_from = models.CharField(
         max_length=1, choices=CANDIDATE_FROM_CHOICES)

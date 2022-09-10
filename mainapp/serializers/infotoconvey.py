@@ -1,0 +1,10 @@
+from rest_framework import serializers
+from mainapp.models import InfoToConvey
+from mainapp.serializers.candidate import CandidateContactSerializer
+
+class InfoToConveySerializer(serializers.ModelSerializer):
+
+    student = CandidateContactSerializer()
+    class Meta:
+        model=InfoToConvey
+        fields='__all__'

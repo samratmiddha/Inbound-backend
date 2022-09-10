@@ -9,4 +9,4 @@ class Round_Info(models.Model):
     duration = models.DurationField(blank=True, null=True)
     marks_obtained = models.IntegerField(default=0, blank=True)
     remarks = models.TextField(blank=True, null=True)
-    panel = models.ForeignKey('Interview_Panel', on_delete=models.DO_NOTHING)
+    panel = models.ForeignKey('Interview_Panel', on_delete=models.RESTRICT)
