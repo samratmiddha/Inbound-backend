@@ -15,10 +15,8 @@ class Round(models.Model):
     name = models.CharField(max_length=200)
     type = models.CharField(max_length=1, choices=ROUND_TYPE_CHOICES)
     season = models.ForeignKey('Season', on_delete=models.CASCADE)
-    dates = ArrayField(
-        models.DateField(),
-        blank=True
-    )
+    start_date = models.DateField(null=True)
+    end_date= models.DateField(null=True)
 
     class Meta:
         verbose_name_plural='Rounds'
