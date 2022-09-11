@@ -1,4 +1,5 @@
 
+from tabnanny import verbose
 from django.db import models
 
 from django.contrib.postgres.fields import ArrayField
@@ -14,3 +15,9 @@ class Interview_Panel(models.Model):
         models.TextField(),
         blank=True
     )
+
+    class Meta:
+        verbose_name_plural='Interview_Panels'
+
+    def __str__(self):
+        return f"{self.members}"

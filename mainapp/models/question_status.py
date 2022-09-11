@@ -7,3 +7,9 @@ class Question_Status(models.Model):
     marks = models.IntegerField(blank=True, null=True)
     normalized_marks = models.FloatField(default=marks)
     is_checked = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name_plural='Question_Status'
+
+    def __str__(self):
+        return f"{self.student}-{self.question}"

@@ -12,3 +12,9 @@ class User(models.Model):
     year = models.IntegerField()
     role = models.CharField(max_length=10, choices=ROLE_CHOICES)
     email = models.EmailField(max_length=254)
+
+    class Meta:
+        verbose_name_plural='Users'
+
+    def __str__(self):
+        return self.name

@@ -7,3 +7,11 @@ class Question(models.Model):
     submission_link = models.URLField(max_length=300, blank=True, null=True)
     section = models.ForeignKey('Section', on_delete=models.CASCADE)
     asignee = models.ManyToManyField('User')
+
+    class Meta:
+        verbose_name_plural='question'
+
+    def __str__(self):
+        return f"{self.question_text}"
+
+    

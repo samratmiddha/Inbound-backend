@@ -9,4 +9,11 @@ class Round_Info(models.Model):
     duration = models.DurationField(blank=True, null=True)
     marks_obtained = models.IntegerField(default=0, blank=True)
     remarks = models.TextField(blank=True, null=True)
-    panel = models.ForeignKey('Interview_Panel', on_delete=models.RESTRICT)
+    panel = models.ForeignKey('Interview_Panel', on_delete=models.RESTRICT,blank=True,null=True)
+
+class Meta:
+    verbose_name_plural='Round_Info'
+    verbose_name='Round_Info'
+
+def __str__(self):
+    return f"{self.student}-{self.round}"

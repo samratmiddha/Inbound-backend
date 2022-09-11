@@ -1,4 +1,5 @@
 
+from tabnanny import verbose
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 
@@ -18,3 +19,9 @@ class Round(models.Model):
         models.DateField(),
         blank=True
     )
+
+    class Meta:
+        verbose_name_plural='Rounds'
+
+    def __str__(self):
+        return self.name

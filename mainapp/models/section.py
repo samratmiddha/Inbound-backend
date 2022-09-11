@@ -1,4 +1,5 @@
 
+from tabnanny import verbose
 from django.db import models
 
 
@@ -8,3 +9,9 @@ class Section(models.Model):
     max_marks = models.IntegerField(blank=True,null=True)
     Weightage = models.IntegerField(default=1, blank=True)
     name = models.CharField(max_length=200)
+
+    class Meta:
+        verbose_name_plural='Sections'
+
+    def __str__(self):
+        return self.name

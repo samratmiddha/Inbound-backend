@@ -26,3 +26,9 @@ class Candidate(models.Model):
     rounds = models.ManyToManyField(
         'Round', through='Round_Info')
 
+    class Meta:
+        verbose_name_plural='Candidates'
+
+    def __str__(self):
+        return f"{self.name}"
+
