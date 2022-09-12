@@ -14,7 +14,7 @@ class Candidate(models.Model):
     email = models.EmailField(max_length=200, blank=True, null=True)
     branch = models.CharField(max_length=200, blank=True, null=True)
     mobile_no = models.CharField(max_length=14, blank=True, null=True)
-    season = models.ForeignKey('Season', on_delete=models.CASCADE)
+    season = models.ForeignKey('Season', on_delete=models.CASCADE,related_name='candidate_season')
     CG = models.FloatField(blank=True, null=True)
     year = models.IntegerField(default=1)
     enrollment_number = models.CharField(max_length=8, blank=True, null=True)
@@ -24,7 +24,7 @@ class Candidate(models.Model):
         max_length=1, choices=CANDIDATE_FROM_CHOICES)
 
     rounds = models.ManyToManyField(
-        'Round', through='Round_Info')
+        'Round', through='Round_Info',related_name='candidate_rounds')
 
     class Meta:
         verbose_name_plural='Candidates'

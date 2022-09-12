@@ -11,8 +11,8 @@ PANEL_TYPE_CHOICES=[
 
 
 class Interview_Panel(models.Model):
-    season = models.ForeignKey('Season', on_delete=models.CASCADE)
-    members = models.ManyToManyField('User')
+    season = models.ForeignKey('Season', on_delete=models.CASCADE,related_name='panel_season')
+    members = models.ManyToManyField('User',related_name='panel_members')
     is_active = models.BooleanField(default=False)
     location = models.CharField(max_length=200)
     type=models.CharField(max_length=4,choices=PANEL_TYPE_CHOICES,null=True)
