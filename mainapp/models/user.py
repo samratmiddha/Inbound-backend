@@ -12,6 +12,7 @@ class User(models.Model):
     year = models.IntegerField()
     role = models.CharField(max_length=10, choices=ROLE_CHOICES)
     email = models.EmailField(max_length=254)
+    enrolment_number = models.CharField(max_length=8,unique=True,primary_key=True)
 
     class Meta:
         verbose_name_plural='Users'
