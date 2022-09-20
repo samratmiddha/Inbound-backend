@@ -1,6 +1,6 @@
 
 from rest_framework import serializers
-from Inbound.mainapp.serializers.candidate import CandidateNameSerializer
+from mainapp.serializers.candidate import CandidateNameSerializer
 from mainapp.serializers.interview_panel import InterviewPanelSerializer
 from mainapp.serializers.round import RoundSerializer
 from mainapp.models import Round_Info
