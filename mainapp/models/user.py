@@ -1,5 +1,7 @@
 
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 
 ROLE_CHOICES = [
     ('designer', 'Designer'),
@@ -7,15 +9,16 @@ ROLE_CHOICES = [
 ]
 
 
-class User(models.Model):
-    name = models.CharField(max_length=100)
-    year = models.IntegerField()
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES)
-    email = models.EmailField(max_length=254)
-    enrolment_number = models.CharField(max_length=8,unique=True,primary_key=True)
+class User(AbstractUser):
+    username = models.CharField(max_length=200,unique=True,primary_key=True)
+    name = models.CharField(max_length=100,null=True,blank=True)
+    year = models.IntegerField(null=True,blank=True)
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES,null=True,blank=True)
+    email = models.EmailField(max_length=254,null=True,blank=True)
+    enrolment_number = models.CharField(max_length=8,)
+    USERNAME_FIELD = 'username'
+
 
     class Meta:
         verbose_name_plural='Users'
 
-    def __str__(self):
-        return self.name

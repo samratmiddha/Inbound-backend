@@ -1,4 +1,4 @@
-from dataclasses import fields
+
 from rest_framework import serializers
 from mainapp.serializers.season import SeasonNameSerializer
 from mainapp.serializers.round import RoundSerializer

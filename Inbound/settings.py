@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 
+
+
 import environ
 env = environ.Env()
 environ.Env.read_env()
@@ -35,15 +37,26 @@ ALLOWED_HOSTS = ['localhost']
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
     'mainapp',
 ]
+
+AUTH_USER_MODEL ='mainapp.User'
+REST_FRAMEWORK = {
+  'DEFAULT_PERMISSION_CLASSES': (
+      'rest_framework.permissions.IsAuthenticated',
+  ),
+  'DEFAULT_AUTHENTICATION_CLASSES': (
+      'rest_framework.authentication.SessionAuthentication',
+      'rest_framework.authentication.BasicAuthentication',
+  ),
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
