@@ -17,4 +17,7 @@ router.register(r'sections',SectionViewSet)
 router.register(r'sectional_marks',SectionalMarksViewSet)
 urlpatterns=[
     path('',include(router.urls)),
+    path('get_oauth_token/',get_token),
+    path('send_token_request/',login_redirect),
+    path('get_access_token/',get_access_token),
 ]
