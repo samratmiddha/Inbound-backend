@@ -6,8 +6,11 @@ from rest_framework import filters
 
 
 class SectionViewSet(viewsets.ModelViewSet):
-
     queryset=Section.objects.all()
     serializer_class=SectionSerializer
+    filter_backends=[DjangoFilterBackend,filters.OrderingFilter]
+    ordering_fields=['round','max_marks','name','weightage']
+    ordering=['round']
+
 
     

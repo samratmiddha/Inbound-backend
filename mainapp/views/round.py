@@ -8,4 +8,8 @@ from rest_framework import filters
 class RoundViewSet(viewsets.ModelViewSet):
     queryset=Round.objects.all()
     serializer_class=RoundSerializer
+    filter_backends=[DjangoFilterBackend,filters.OrderingFilter]
+    ordering_fields=['name','season','type','start_date','end_date']
+    ordering=['name']
+
     

@@ -7,7 +7,7 @@ from django.db import models
 class Section(models.Model):
     round = models.ForeignKey('Round', on_delete=models.CASCADE,related_name='section_round')
     max_marks = models.IntegerField(blank=True,null=True)
-    Weightage = models.IntegerField(default=1, blank=True)
+    weightage = models.IntegerField(default=1, blank=True)
     name = models.CharField(max_length=200)
 
     class Meta:

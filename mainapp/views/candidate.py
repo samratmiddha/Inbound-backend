@@ -9,3 +9,4 @@ class CandidiateViewSet(viewsets.ModelViewSet):
     serializer_class=CandidateSerializer
     filter_backends=[DjangoFilterBackend,filters.OrderingFilter]
     ordering_fields=['name','email','branch','enrolment_number']
+    ordering=['name']

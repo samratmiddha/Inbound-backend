@@ -11,6 +11,9 @@ from rest_framework import filters
 class UserViewSet(viewsets.ModelViewSet):
     queryset= User.objects.all()
     serializer_class=UserSerializer
+    filter_backends=[DjangoFilterBackend,filters.OrderingFilter]
+    ordering_fields=['username','name','email','enrolment_number']
+    ordering=['name']
 
 
 

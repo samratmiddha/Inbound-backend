@@ -8,3 +8,6 @@ from rest_framework import filters
 class QuestionViewSet(viewsets.ModelViewSet):
     queryset=Question.objects.all()
     serializer_class=QuestionSerializer
+    filter_backends=[DjangoFilterBackend,filters.OrderingFilter]
+    ordering_fields=['question_text','section','asignee']
+    ordering=['question_text']

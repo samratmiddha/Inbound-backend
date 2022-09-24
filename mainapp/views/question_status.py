@@ -6,6 +6,9 @@ from rest_framework import filters
 
 
 class QuestionStatusViewSet(viewsets.ModelViewSet):
+    filter_backends=[DjangoFilterBackend,filters.OrderingFilter]
     queryset=Question_Status.objects.all()
     serializer_class=QuestionStatusSerializer
+    ordering_fields=['question','student','marks','normalized_marks','is_checked']
+    ordering=['question']
     
