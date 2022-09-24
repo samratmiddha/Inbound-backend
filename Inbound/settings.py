@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mainapp',
+    'django_filters'
 ]
 
 AUTH_USER_MODEL ='mainapp.User'
@@ -54,8 +55,9 @@ REST_FRAMEWORK = {
   ),
   'DEFAULT_AUTHENTICATION_CLASSES': (
       'rest_framework.authentication.SessionAuthentication',
-      'rest_framework.authentication.BasicAuthentication',
   ),
+  'DEFAULT_FILTER_BACKENDS': [
+    'django_filters.rest_framework.DjangoFilterBackend'],
 }
 
 MIDDLEWARE = [
@@ -145,7 +147,5 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTHENTICATION_BACKENDS = (
-    'mainappapp.auth_backend.PasswordlessAuthBackend',
-)
+AUTHENTICATION_BACKENDS = ('mainapp.views.PasswordlessAuthBackend','django.contrib.auth.backends.ModelBackend',)
 
