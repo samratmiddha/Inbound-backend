@@ -37,7 +37,7 @@ ALLOWED_HOSTS = ['localhost']
 # Application definition
 
 INSTALLED_APPS = [
-    'channels'
+    'channels',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
