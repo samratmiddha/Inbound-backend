@@ -8,33 +8,29 @@ from django.http import HttpResponse,HttpRequest
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import login,authenticate
 from django.contrib.auth.backends import BaseBackend
+from mainapp.permissions import FullAccessPermission
+from decouple import config
+CLIENT_ID=config('CLIENT_ID')
+CLIENT_SECRET=config('CLIENT_SECRET')
 
-CLIENT_ID='RdXQYzPYBpaZcAhp5GMrPCRMudSDd0QlBM502ooq'
-CLIENT_SECRET='tBKSwiH2DS1XYF7CpjZF2idcsAxdI7rchflEjHBNGduL0zth5RTOK3HGdXlbTDPywqBkNA1zcKi4Ds40cGGp6VrWfjyRSMZC5BUWbrvhsYUjydHClvoraFavYcf1EBBh'
+def auth(username,name,year,email,enrolment_number):
+    try:
+        user=User.objects.get(username=username)
+        return user
 
-class PasswordlessAuthBackend(BaseBackend):
-    def authenticate(self,username,name,year,email,enrolment_number):
-        print("hi4")
-        try:
-            print("hi2")
-            user=User.objects.get(username=username)
-            print(user)
-            return user
-        except User.DoesNotExist:
-            User.objects.create(username=username,name=name,email=email,year=year,enrolment_number=enrolment_number)
-            user=User.objects.get(username=username)
-            print("hi3")
-            print(user)
-            if year==3 or year==4:
-                user.is_staff=True
-            return user
+    except User.DoesNotExist:
+        User.objects.create(username=username,name=name,email=email,year=year,enrolment_number=enrolment_number)
+        user=User.objects.get(username=username)
+        if year==3 or year==4:
+            user.FullAccessPermission=True
+        return user
             
 
-    def get_user(self, username):
-        try:
-            return User.objects.get(username=username)
-        except User.DoesNotExist:
-            return None
+def get_user(username):
+    try:
+        return User.objects.get(username=username)
+    except User.DoesNotExist:
+        return None
 
 
 def login_redirect(request):
@@ -70,17 +66,23 @@ def get_token(request):
     year=response.json()['student']['currentYear']
     email=response.json()['contactInformation']['emailAddress']
     enrolment_number=response.json()['student']['enrolmentNumber']
-    
+
     for role in response.json()['person']['roles']:
         if(role['role']=="Maintainer"):
             is_member=True
+       
 
     if is_member:
-        user=authenticate(username=username,name=name,year=year,email=email,enrolment_number=enrolment_number)
-        print(user)
-        if user is not None:
+        try:
+            user=auth(username=username,name=name,year=year,email=email,enrolment_number=enrolment_number)
+        except:
+            return HttpResponse("unable to create user")
+        try:
             login(request,user)
-            print("logged in")
+        except:
+            return HttpResponse("unable to log in successfully")
+    else:
+        return HttpResponse("You are not a member of IMG")
 
 
     return HttpResponse(response.content)

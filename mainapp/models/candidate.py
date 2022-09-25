@@ -1,5 +1,4 @@
 from email.policy import default
-from tabnanny import verbose
 from django.db import models
 
 CANDIDATE_FROM_CHOICES = [

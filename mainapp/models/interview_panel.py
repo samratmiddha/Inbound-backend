@@ -1,8 +1,4 @@
-
-
 from django.db import models
-
-from django.contrib.postgres.fields import ArrayField
 
 PANEL_TYPE_CHOICES=[
     ('tech','Tech'),

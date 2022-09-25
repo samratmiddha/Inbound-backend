@@ -1,4 +1,3 @@
-
 from django.db import models
 
 class Sectional_Marks(models.Model):
