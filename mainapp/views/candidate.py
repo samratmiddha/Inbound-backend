@@ -41,6 +41,7 @@ class CandidiateViewSet(viewsets.ModelViewSet):
                     CG=row['CG'],
                     enrolment_number=row['enrolment_number'],
                     season_id=season_id,
+                    candidate_from=row['candidate_from']
                 )
             )
         Candidate.objects.bulk_create(candidate_list)
