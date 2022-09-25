@@ -3,6 +3,7 @@ from mainapp.models import InfoToConvey
 from mainapp.serializers import InfoToConveySerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
+from rest_framework.permissions import IsAuthenticated
 
 
 class InfoToConveyViewSet(viewsets.ModelViewSet):
@@ -11,5 +12,6 @@ class InfoToConveyViewSet(viewsets.ModelViewSet):
     filter_backends=[DjangoFilterBackend,filters.OrderingFilter]
     ordering_fields=['student','isconveyed','information']
     ordering=['student']
+    permission_classes=[IsAuthenticated]
     
     
