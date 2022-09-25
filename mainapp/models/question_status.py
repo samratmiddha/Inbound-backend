@@ -4,8 +4,8 @@ from django.db import models
 class Question_Status(models.Model):
     question = models.ForeignKey('Question', on_delete=models.CASCADE,related_name='question_info')
     student = models.ForeignKey('Candidate', on_delete=models.CASCADE,related_name='question_student_info')
-    marks = models.IntegerField(blank=True, null=True)
-    normalized_marks = models.FloatField(default=marks)
+    marks = models.IntegerField(default=0,blank=True, null=True)
+    normalized_marks = models.FloatField(default=marks,blank=True)
     is_checked = models.BooleanField(default=False)
 
     class Meta:
