@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from mainapp.serializers import UserSerializer,UserNameSerializer
+from mainapp.serializers import UserInfoSerializer
 from rest_framework import viewsets
 from rest_framework.response import Response
 from mainapp.models import User
@@ -11,7 +11,7 @@ from rest_framework.permissions import IsAuthenticated
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset= User.objects.all()
-    serializer_class=UserSerializer
+    serializer_class=UserInfoSerializer
     filter_backends=[DjangoFilterBackend,filters.OrderingFilter]
     ordering_fields=['username','name','email','enrolment_number']
     ordering=['name']
