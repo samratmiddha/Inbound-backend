@@ -1,12 +1,7 @@
 from django.db import models
+from mainapp.constants import ROUND_TYPE_CHOICES
 
 
-
-ROUND_TYPE_CHOICES = [
-    ('I', 'Interview'),
-    ('P', 'Project'),
-    ('T', 'Test'),
-]
 
 
 class Round(models.Model):

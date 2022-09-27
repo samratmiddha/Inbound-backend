@@ -1,11 +1,6 @@
 from email.policy import default
 from django.db import models
-
-CANDIDATE_FROM_CHOICES = [
-    ('P', 'Project'),
-    ('T', 'Test'),
-    ('O', 'Other'),
-]
+from mainapp.constants import CANDIDATE_FROM_CHOICES
 
 
 class Candidate(models.Model):

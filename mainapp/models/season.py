@@ -1,5 +1,5 @@
 from django.db import models
-from .user import  ROLE_CHOICES
+from mainapp.constants import  ROLE_CHOICES
 import datetime
 
 

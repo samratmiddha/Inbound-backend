@@ -1,9 +1,6 @@
 from django.db import models
+from mainapp.constants import PANEL_TYPE_CHOICES
 
-PANEL_TYPE_CHOICES=[
-    ('tech','Tech'),
-    ('hr','HR'),
-]
 
 
 class Interview_Panel(models.Model):

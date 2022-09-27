@@ -19,4 +19,5 @@ urlpatterns=[
     path('',include(router.urls)),
     path('get_oauth_token/',get_token),
     path('send_token_request/',login_redirect),
+    path('logout/',logout_user),
 ]

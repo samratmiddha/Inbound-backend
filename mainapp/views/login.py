@@ -4,12 +4,13 @@ from django.shortcuts import redirect
 from rest_framework.response import Response
 from django.shortcuts import render
 import requests
-from django.http import HttpResponse,HttpRequest
+from django.http import HttpResponse,HttpRequest,HttpResponseForbidden
 from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth import login,authenticate
+from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.backends import BaseBackend
 from mainapp.permissions import FullAccessPermission
 from decouple import config
+from rest_framework.decorators import api_view,authentication_classes,permission_classes
 CLIENT_ID=config('CLIENT_ID')
 CLIENT_SECRET=config('CLIENT_SECRET')
 
@@ -32,13 +33,16 @@ def get_user(username):
     except User.DoesNotExist:
         return None
 
-
+@api_view(('GET',))
 def login_redirect(request):
     SITE=f'https://channeli.in/oauth/authorise/?client_id={CLIENT_ID}&redirect_uri=http://localhost:8000/get_oauth_token/'
     return redirect(SITE)
 
+@api_view(('GET','POST'))
+@permission_classes([])
 def get_token(request):
     AUTHORISATION_CODE=request.GET.get('code','')
+    
 
     post_data={
   "client_id": CLIENT_ID,
@@ -76,18 +80,21 @@ def get_token(request):
         try:
             user=auth(username=username,name=name,year=year,email=email,enrolment_number=enrolment_number)
         except:
-            return HttpResponse("unable to create user")
+            return Response("unable to create user")
         try:
             login(request,user)
         except:
-            return HttpResponse("unable to log in successfully")
+            return Response("unable to log in successfully")
     else:
-        return HttpResponse("You are not a member of IMG")
+        return Response("You are not a member of IMG")
 
 
-    return HttpResponse(response.content)
-
-
+    return Response(response.content)
+@api_view(('GET',))
+def logout_user(request):
+    if request.user.is_authenticated:
+            logout(request)
+            return Response("user logged out Successfully")    
 
 
 
