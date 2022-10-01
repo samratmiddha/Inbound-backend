@@ -1,4 +1,5 @@
 
+from urllib.request import Request
 from mainapp.models import User
 from django.shortcuts import redirect
 from rest_framework.response import Response
@@ -11,6 +12,7 @@ from django.contrib.auth.backends import BaseBackend
 from mainapp.permissions import FullAccessPermission
 from decouple import config
 from rest_framework.decorators import api_view,authentication_classes,permission_classes
+from mainapp.serializers import UserInfoSerializer
 CLIENT_ID=config('CLIENT_ID')
 CLIENT_SECRET=config('CLIENT_SECRET')
 
@@ -34,11 +36,24 @@ def get_user(username):
         return None
 
 @api_view(('GET',))
+@permission_classes([])
+def check_login(request):
+    serializer = UserInfoSerializer(request.user)
+    content = {'Logged_In': False,'user':serializer.data}
+    if request.user.is_authenticated:
+        content['Logged_In']=True
+    return Response(content)
+ 
+
+@api_view(('GET',))
+@authentication_classes([])
+@permission_classes([])
 def login_redirect(request):
     SITE=f'https://channeli.in/oauth/authorise/?client_id={CLIENT_ID}&redirect_uri=http://localhost:8000/get_oauth_token/'
     return redirect(SITE)
 
 @api_view(('GET','POST'))
+@authentication_classes([])
 @permission_classes([])
 def get_token(request):
     AUTHORISATION_CODE=request.GET.get('code','')

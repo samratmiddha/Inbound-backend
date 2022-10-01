@@ -19,11 +19,11 @@ from mainapp.consumers import AsyncIMGUser
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Inbound.settings')
 
-django_asgi_app = get_asgi_application()
+
 
 
 application = ProtocolTypeRouter({
-    "http": django_asgi_app,
+    "http": get_asgi_application(),
     "websocket": AllowedHostsOriginValidator(
         AuthMiddlewareStack(
             URLRouter([

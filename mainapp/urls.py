@@ -20,4 +20,5 @@ urlpatterns=[
     path('get_oauth_token/',get_token),
     path('send_token_request/',login_redirect),
     path('logout/',logout_user),
+    path('check_login/',check_login)
 ]
