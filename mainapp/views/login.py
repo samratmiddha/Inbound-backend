@@ -38,10 +38,11 @@ def get_user(username):
 @api_view(('GET',))
 @permission_classes([])
 def check_login(request):
-    serializer = UserInfoSerializer(request.user)
-    content = {'Logged_In': False,'user':serializer.data}
+    content = {'Logged_In': False}
     if request.user.is_authenticated:
-        content['Logged_In']=True
+        serializer = UserInfoSerializer(request.user)
+        content = {'Logged_In': True,'user':serializer.data}
+
     return Response(content)
  
 
@@ -104,7 +105,7 @@ def get_token(request):
         return Response("You are not a member of IMG")
 
 
-    return Response(response.content)
+    return redirect('http://localhost:3000/dashboard')
 @api_view(('GET',))
 def logout_user(request):
     if request.user.is_authenticated:
