@@ -14,7 +14,6 @@ from pathlib import Path
 from decouple import config
 
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY=config('SECRET_KEY')
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -47,16 +46,16 @@ INSTALLED_APPS = [
     'django_filters'
 ]
 
-AUTH_USER_MODEL ='mainapp.User'
+AUTH_USER_MODEL = 'mainapp.User'
 REST_FRAMEWORK = {
-  'DEFAULT_PERMISSION_CLASSES': (
-      'rest_framework.permissions.IsAuthenticated',
-  ),
-  'DEFAULT_AUTHENTICATION_CLASSES': (
-      'rest_framework.authentication.SessionAuthentication',
-  ),
-  'DEFAULT_FILTER_BACKENDS': [
-    'django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend'],
 }
 
 MIDDLEWARE = [
@@ -100,7 +99,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': config('DB_NAME'),
         'USER': config('DB_USER'),
-        'PASSWORD':config('DB_PASSWORD'),
+        'PASSWORD': config('DB_PASSWORD'),
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -170,4 +169,3 @@ CORS_ALLOW_ORIGINS = [
 #     'http://localhost:3000',
 #     'http://127.0.0.1:3000',
 # ]
-
