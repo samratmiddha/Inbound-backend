@@ -12,5 +12,6 @@ class SeasonViewSet(viewsets.ModelViewSet):
     serializer_class=SeasonSerializer
     filter_backends=[DjangoFilterBackend,filters.OrderingFilter]
     ordering_fields=['name','session','is_going','type']
+    filterset_fields=['name','session','is_going','type']
     ordering=['session']
     permission_classes=[IsAuthenticated]

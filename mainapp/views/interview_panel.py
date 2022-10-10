@@ -10,5 +10,6 @@ class InterviewPanelViewSet(viewsets.ModelViewSet):
     serializer_class=InterviewPanelSerializer
     filter_backends=[DjangoFilterBackend,filters.OrderingFilter]
     ordering_fields=['members','season','is_active','location','type']
+    filterset_fields=['members','season','is_active','location','type']
     ordering=['is_active']
     permission_classes=[IsAuthenticated]

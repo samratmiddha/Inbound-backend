@@ -12,5 +12,6 @@ class QuestionViewSet(viewsets.ModelViewSet):
     serializer_class=QuestionSerializer
     filter_backends=[DjangoFilterBackend,filters.OrderingFilter]
     ordering_fields=['question_text','section','asignee']
+    filterset_fields=['question_text','section','asignee']
     ordering=['question_text']
     permission_classes=[FullAccessPermission,IsAuthenticated]

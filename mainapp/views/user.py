@@ -14,6 +14,7 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class=UserInfoSerializer
     filter_backends=[DjangoFilterBackend,filters.OrderingFilter]
     ordering_fields=['username','name','email','enrolment_number']
+    filterset_fields=['username','name','email','enrolment_number']
     ordering=['name']
     permission_classes=[IsAuthenticated]
     

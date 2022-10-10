@@ -14,5 +14,6 @@ class SectionalMarksViewSet(viewsets.ModelViewSet):
     serializer_class=SectionalMarksSerializer
     filter_backends=[DjangoFilterBackend,filters.OrderingFilter]
     ordering_fields=['student','section','marks']
+    filterset_fields=['student','section','marks']
     ordering=['student']
     permission_classes=[FullAccessPermission,IsAuthenticated]

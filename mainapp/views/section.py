@@ -11,6 +11,7 @@ class SectionViewSet(viewsets.ModelViewSet):
     serializer_class=SectionSerializer
     filter_backends=[DjangoFilterBackend,filters.OrderingFilter]
     ordering_fields=['round','max_marks','name','weightage']
+    filterset_fields=['round','max_marks','name','weightage']
     ordering=['round']
     permission_classes=[IsAuthenticated]
 

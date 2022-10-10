@@ -12,6 +12,7 @@ class QuestionStatusViewSet(viewsets.ModelViewSet):
     queryset=Question_Status.objects.all()
     serializer_class=QuestionStatusSerializer
     ordering_fields=['question','student','marks','normalized_marks','is_checked']
+    filterset_fields=['question','student','marks','normalized_marks','is_checked']
     ordering=['question']
     permission_classes=[FullAccessPermission,IsAuthenticated]
     

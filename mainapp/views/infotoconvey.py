@@ -10,6 +10,7 @@ class InfoToConveyViewSet(viewsets.ModelViewSet):
     queryset=InfoToConvey.objects.all()
     serializer_class=InfoToConveySerializer
     filter_backends=[DjangoFilterBackend,filters.OrderingFilter]
+    filterset_fields=['student','isconveyed','information']
     ordering_fields=['student','isconveyed','information']
     ordering=['student']
     permission_classes=[IsAuthenticated]
