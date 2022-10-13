@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from mainapp.models import Candidate
 from mainapp.serializers import CandidateSerializer
+from mainapp.serializers import CandidateDefaultSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework.permissions import IsAuthenticated
@@ -9,28 +10,36 @@ import csv
 import codecs
 from rest_framework.response import Response
 
-class CandidiateViewSet(viewsets.ModelViewSet):
-    queryset=Candidate.objects.all()
-    serializer_class=CandidateSerializer
-    filter_backends=[DjangoFilterBackend,filters.OrderingFilter]
-    ordering_fields=['name','email','branch','enrolment_number']
-    filterset_fields=['name','email','branch','enrolment_number']
-    ordering=['name']
-    permission_classes=[IsAuthenticated]
 
+class CandidiateViewSet(viewsets.ModelViewSet):
+    queryset = Candidate.objects.all()
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    ordering_fields = ['name', 'email', 'branch', 'enrolment_number']
+    filterset_fields = ['name', 'email', 'branch', 'enrolment_number']
+    ordering = ['name']
+    permission_classes = [IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return CandidateSerializer
+        if self.action == 'retrieve':
+            return CandidateSerializer
+        # I dont' know what you want for create/destroy/update.
+        return CandidateDefaultSerializer
 
     @action(detail=False, methods=['POST'])
-    def upload_data_through_file(self,request):
+    def upload_data_through_file(self, request):
         file = request.FILES.get("file")
-        season_id=request.POST.get("season_id")
+        season_id = request.POST.get("season_id")
 
-        reader = csv.DictReader(codecs.iterdecode(file, "utf-8"), delimiter=",")
+        reader = csv.DictReader(
+            codecs.iterdecode(file, "utf-8"), delimiter=",")
         data = list(reader)
 
         serializer = self.serializer_class(data=data, many=True)
         serializer.is_valid(raise_exception=True)
 
-        candidate_list=[]
+        candidate_list = []
         for row in serializer.data:
             candidate_list.append(
                 Candidate(

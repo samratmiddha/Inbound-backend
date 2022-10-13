@@ -5,10 +5,18 @@ from mainapp.serializers.interview_panel import InterviewPanelSerializer
 from mainapp.serializers.round import RoundSerializer
 from mainapp.models import Round_Info
 
+
 class RoundInfoSerializer(serializers.ModelSerializer):
-    student=CandidateNameSerializer()
-    panel=InterviewPanelSerializer()
-    round=RoundSerializer()
+    student = CandidateNameSerializer()
+    panel = InterviewPanelSerializer()
+    round = RoundSerializer()
+
     class Meta:
-        model=Round_Info
-        fields='__all__'
+        model = Round_Info
+        fields = '__all__'
+
+
+class RoundInfoDefaultSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Round_Info
+        fields = '__all__'

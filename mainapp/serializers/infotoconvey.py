@@ -8,3 +8,8 @@ class InfoToConveySerializer(serializers.ModelSerializer):
     class Meta:
         model=InfoToConvey
         fields='__all__'
+
+class InfoToConveyCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=InfoToConvey
+        fields='__all__'
