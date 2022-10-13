@@ -24,7 +24,6 @@ class CandidiateViewSet(viewsets.ModelViewSet):
             return CandidateSerializer
         if self.action == 'retrieve':
             return CandidateSerializer
-        # I dont' know what you want for create/destroy/update.
         return CandidateDefaultSerializer
 
     @action(detail=False, methods=['POST'])

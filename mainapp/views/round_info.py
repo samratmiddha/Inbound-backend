@@ -20,5 +20,4 @@ class RoundViewSet(viewsets.ModelViewSet):
             return RoundInfoSerializer
         if self.action == 'retrieve':
             return RoundInfoSerializer
-       # I dont' know what you want for create/destroy/update.
         return RoundInfoDefaultSerializer

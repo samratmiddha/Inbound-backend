@@ -20,5 +20,4 @@ class InterviewPanelViewSet(viewsets.ModelViewSet):
             return InterviewPanelSerializer
         if self.action == 'retrieve':
             return InterviewPanelSerializer
-        # I dont' know what you want for create/destroy/update.
         return InterviewPanelDefaultSerializer

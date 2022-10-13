@@ -23,5 +23,4 @@ class QuestionStatusViewSet(viewsets.ModelViewSet):
             return QuestionStatusSerializer
         if self.action == 'retrieve':
             return QuestionStatusSerializer
-        # I dont' know what you want for create/destroy/update.
         return QuestionStatusDefaultSerializer
