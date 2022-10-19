@@ -15,6 +15,7 @@ class InfoToConveyViewSet(viewsets.ModelViewSet):
     ordering_fields = ['student', 'is_conveyed', 'information']
     ordering = ['student']
     permission_classes = [IsAuthenticated]
+    allowed_method = ['get', 'post', 'head', 'patch', 'put']
 
     def get_serializer_class(self):
         if self.action == 'list':

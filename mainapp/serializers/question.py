@@ -7,7 +7,7 @@ from mainapp.models import Question
 
 class QuestionSerializer(serializers.ModelSerializer):
     section = SectionNameSerializer()
-    asignee = UserNameSerializer()
+    # asignee = UserNameSerializer()
 
     class Meta:
         model = Question
