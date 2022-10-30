@@ -16,8 +16,8 @@ from rest_framework import  status
 class CandidiateViewSet(viewsets.ModelViewSet):
     queryset = Candidate.objects.all()
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    ordering_fields = ['name', 'email', 'branch', 'enrollment_number']
-    filterset_fields = ['name', 'email', 'branch', 'enrollment_number']
+    ordering_fields = ['name', 'email', 'branch', 'enrollment_number','season']
+    filterset_fields = ['name', 'email', 'branch', 'enrollment_number','season']
     ordering = ['name']
     permission_classes = [IsAuthenticated]
 

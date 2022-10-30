@@ -25,6 +25,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
         if self.action == 'retrieve':
             return QuestionSerializer
         return QuestionDefualtSerializer
+        
     @action(methods=['POST'],detail=False,url_name='multiple_create/')
     def multiple_create(self,request,*args,**kwargs):
         serializer=self.get_serializer(data=request.data,many=True)
