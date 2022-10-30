@@ -6,6 +6,9 @@ from rest_framework import filters
 from mainapp.permissions import FullAccessPermission
 from rest_framework.permissions import IsAuthenticated
 from mainapp.serializers import QuestionDefualtSerializer
+from rest_framework.decorators import action
+from rest_framework import  status
+
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
@@ -22,3 +25,9 @@ class QuestionViewSet(viewsets.ModelViewSet):
         if self.action == 'retrieve':
             return QuestionSerializer
         return QuestionDefualtSerializer
+    @action(methods=['POST'],detail=False,url_name='multiple_create/')
+    def multiple_create(self,request,*args,**kwargs):
+        serializer=self.get_serializer(data=request.data,many=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.data,status=status.HTTP_201_CREATED)

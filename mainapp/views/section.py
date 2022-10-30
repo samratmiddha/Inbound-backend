@@ -5,6 +5,9 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework.permissions import IsAuthenticated
 from mainapp.serializers import SectionDefaultSerializer
+from rest_framework.decorators import action
+from rest_framework import  status
+
 
 
 class SectionViewSet(viewsets.ModelViewSet):
@@ -21,3 +24,10 @@ class SectionViewSet(viewsets.ModelViewSet):
         if self.action == 'retrieve':
             return SectionSerializer
         return SectionDefaultSerializer
+ 
+    @action(methods=['POST'],detail=False,url_name='multiple_create/')
+    def multiple_create(self,request,*args,**kwargs):
+        serializer=self.get_serializer(data=request.data,many=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.data,status=status.HTTP_201_CREATED)

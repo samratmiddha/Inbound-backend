@@ -9,13 +9,15 @@ from rest_framework.decorators import action
 import csv
 import codecs
 from rest_framework.response import Response
+from rest_framework import  status
+
 
 
 class CandidiateViewSet(viewsets.ModelViewSet):
     queryset = Candidate.objects.all()
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    ordering_fields = ['name', 'email', 'branch', 'enrolment_number']
-    filterset_fields = ['name', 'email', 'branch', 'enrolment_number']
+    ordering_fields = ['name', 'email', 'branch', 'enrollment_number']
+    filterset_fields = ['name', 'email', 'branch', 'enrollment_number']
     ordering = ['name']
     permission_classes = [IsAuthenticated]
 
@@ -48,10 +50,18 @@ class CandidiateViewSet(viewsets.ModelViewSet):
                     branch=row['branch'],
                     year=row['year'],
                     CG=row['CG'],
-                    enrolment_number=row['enrolment_number'],
+                    enrollment_number=row['enrollment_number'],
                     season_id=season_id,
                     candidate_from=row['candidate_from']
                 )
             )
         Candidate.objects.bulk_create(candidate_list)
         return Response("candidates registered successfully")
+
+
+    @action(methods=['POST'],detail=False,url_name='multiple_create/')
+    def multiple_create(self,request,*args,**kwargs):
+        serializer=self.get_serializer(data=request.data,many=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.data,status=status.HTTP_201_CREATED)
