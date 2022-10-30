@@ -8,8 +8,8 @@ from rest_framework.permissions import IsAuthenticated
 from mainapp.serializers import QuestionStatusDefaultSerializer
 from rest_framework.decorators import action
 from rest_framework import  status
-
-
+from rest_framework.response import Response
+import json
 
 class QuestionStatusViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
@@ -19,7 +19,7 @@ class QuestionStatusViewSet(viewsets.ModelViewSet):
     filterset_fields = ['question', 'student',
                         'marks', 'normalized_marks', 'is_checked']
     ordering = ['question']
-    permission_classes = [FullAccessPermission, IsAuthenticated]
+    # permission_classes = [FullAccessPermission, IsAuthenticated]
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -33,3 +33,16 @@ class QuestionStatusViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         return Response(serializer.data,status=status.HTTP_201_CREATED)
+
+    @action(methods=['POST'],detail=False,url_name='multiple_retrieve/')
+    def multiple_retrieve(self,request,*args,**kwargs):
+        data=self.request.data
+        print(self.request.data)
+        studentId=data['studentId']
+        response=[]
+        for question in data['questions']:
+            obj=Question_Status.objects.all().filter(student=studentId,question=question['id'])
+            serializer = QuestionStatusSerializer(obj,many=True)
+            response.append(serializer.data)
+        return Response(response)
+        return Response('hii')
