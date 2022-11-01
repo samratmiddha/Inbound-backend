@@ -41,7 +41,8 @@ class QuestionStatusViewSet(viewsets.ModelViewSet):
         studentId=data['studentId']
         response=[]
         for question in data['questions']:
-            obj=Question_Status.objects.all().filter(student=studentId,question=question['id'])
+            questionId =question['id']
+            obj=Question_Status.objects.all().filter(student=studentId,question=questionId  )
             serializer = QuestionStatusSerializer(obj,many=True)
             response.append(serializer.data)
         return Response(response)

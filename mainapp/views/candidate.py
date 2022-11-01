@@ -10,6 +10,7 @@ import csv
 import codecs
 from rest_framework.response import Response
 from rest_framework import  status
+import io
 
 
 
@@ -28,34 +29,42 @@ class CandidiateViewSet(viewsets.ModelViewSet):
             return CandidateSerializer
         return CandidateDefaultSerializer
 
-    @action(detail=False, methods=['POST'])
-    def upload_data_through_file(self, request):
-        file = request.FILES.get("file")
-        season_id = request.POST.get("season_id")
+    @action( methods=['POST'],detail=False ,url_name='upload_data_through_file/')
+    def upload_data_through_file(self, request,*args,**kwargs):
+        print(self.request.data)
+        csv_file= request.data.get('file')
+        season_id = self.request.data['seasonId']
+        print(csv_file)
+        file = csv_file.read().decode('utf-8')
+        csv_reader = csv.reader(io.StringIO(file))  
+        for row in csv_reader:
+            print(row)
+        # next(reader)
+        # print (reader)
+        # # next(reader)
+        # data = list(reader)
+        # print(data)
 
-        reader = csv.DictReader(
-            codecs.iterdecode(file, "utf-8"), delimiter=",")
-        data = list(reader)
+        # serializer = self.serializer_class(data=data, many=True)
+        # serializer.is_valid(raise_exception=True)
 
-        serializer = self.serializer_class(data=data, many=True)
-        serializer.is_valid(raise_exception=True)
-
-        candidate_list = []
-        for row in serializer.data:
-            candidate_list.append(
-                Candidate(
-                    name=row['name'],
-                    email=row['email'],
-                    mobile_no=row['mobile_no'],
-                    branch=row['branch'],
-                    year=row['year'],
-                    CG=row['CG'],
-                    enrollment_number=row['enrollment_number'],
-                    season_id=season_id,
-                    candidate_from=row['candidate_from']
-                )
-            )
-        Candidate.objects.bulk_create(candidate_list)
+        # candidate_list = []
+        # for row in serializer.data:
+        #     candidate_list.append(
+        #         Candidate(
+        #             name=row['name'],
+        #             email=row['email'],
+        #             mobile_no=row['mobile_no'],
+        #             branch=row['branch'],
+        #             year=row['year'],
+        #             CG=row['CG'],
+        #             enrollment_number=row['enrollment_number'],
+        #             season_id=season_id,
+        #             candidate_from=row['candidate_from'],
+        #             is_exterminated=False,
+        #         )
+        #     )
+        # Candidate.objects.bulk_create(candidate_list)
         return Response("candidates registered successfully")
 
 
