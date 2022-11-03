@@ -15,7 +15,7 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     ordering_fields = ['student', 'round', 'panel','marks_obtained']
     filterset_fields = ['student', 'round', 'panel']
-    ordering = ['marks_obtained']
+    ordering = ['-marks_obtained']
     permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):

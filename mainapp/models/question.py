@@ -5,7 +5,7 @@ class Question(models.Model):
     question_text = models.TextField()
     submission_link = models.URLField(max_length=300, blank=True, null=True)
     section = models.ForeignKey('Section', on_delete=models.CASCADE,related_name='question_section')
-    asignee = models.ManyToManyField('User',related_name='question_asignees')
+    asignee = models.ManyToManyField('User',related_name='question_asignees',blank=True)
 
     class Meta:
         verbose_name_plural='question'

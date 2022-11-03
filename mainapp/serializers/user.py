@@ -11,7 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
 class UserNameSerializer(serializers.ModelSerializer):
     class Meta:
         model=get_user_model()
-        fields=['name','enrolment_number']
+        fields=['name','enrolment_number','username']
 
 class UserInfoSerializer(serializers.ModelSerializer):
     class Meta:
