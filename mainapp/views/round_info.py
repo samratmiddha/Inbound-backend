@@ -13,9 +13,9 @@ from rest_framework import status
 class RoundInfoViewSet(viewsets.ModelViewSet):
     queryset = Round_Info.objects.all()
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    ordering_fields = ['student', 'round', 'panel']
+    ordering_fields = ['student', 'round', 'panel','marks_obtained']
     filterset_fields = ['student', 'round', 'panel']
-    ordering = ['round']
+    ordering = ['marks_obtained']
     permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):

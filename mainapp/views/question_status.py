@@ -18,7 +18,7 @@ class QuestionStatusViewSet(viewsets.ModelViewSet):
                        'marks', 'normalized_marks', 'is_checked']
     filterset_fields = ['question', 'student',
                         'marks', 'normalized_marks', 'is_checked']
-    ordering = ['question']
+    ordering = ['marks']
     # permission_classes = [FullAccessPermission, IsAuthenticated]
 
     def get_serializer_class(self):
