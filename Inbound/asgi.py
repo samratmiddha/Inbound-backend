@@ -27,7 +27,7 @@ application = ProtocolTypeRouter({
     "websocket": AllowedHostsOriginValidator(
         AuthMiddlewareStack(
             URLRouter([
-                re_path(r"^front(end)/$", AsyncIMGUser.as_asgi()),
+                re_path(r"anchor/", AsyncIMGUser.as_asgi()),
             ])
         )
     ),

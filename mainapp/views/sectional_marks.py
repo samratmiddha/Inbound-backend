@@ -18,7 +18,7 @@ class SectionalMarksViewSet(viewsets.ModelViewSet):
     ordering_fields = ['student', 'section', 'marks']
     filterset_fields = ['student', 'section', 'marks']
     ordering = ['student']
-    permission_classes = [FullAccessPermission, IsAuthenticated]
+    # permission_classes = [FullAccessPermission, IsAuthenticated]
 
     def get_serializer_class(self):
         if self.action == 'list':

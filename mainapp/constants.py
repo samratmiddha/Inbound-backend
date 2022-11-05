@@ -12,7 +12,8 @@ PANEL_TYPE_CHOICES=[
 
 
 ROUND_TYPE_CHOICES = [
-    ('I', 'Interview'),
+    ('IT', ' Tech Interview'),
+    ('IH', 'HR INTerview'),
     ('P', 'Project'),
     ('T', 'Test'),
 ]

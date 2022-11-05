@@ -9,6 +9,7 @@ from mainapp.serializers import QuestionStatusDefaultSerializer
 from rest_framework.decorators import action
 from rest_framework import  status
 from rest_framework.response import Response
+from channels.layers import get_channel_layer
 import json
 
 class QuestionStatusViewSet(viewsets.ModelViewSet):
@@ -47,3 +48,12 @@ class QuestionStatusViewSet(viewsets.ModelViewSet):
             response.append(serializer.data)
         return Response(response)
         return Response('hii')
+
+
+    @action(methods=['GET'],detail=False,url_name='get_marks_by_round',url_path='get_marks_by_round/(?P<round_id>\d+)')
+    def get_marks_by_round(self,request,round_id):
+        # channel_layer=get_channel_layer()
+        # channel_layer.group_send('IMG',{"msg":'bum bum'})
+        marks = Question_Status.objects.filter(section__round=round_id)
+        serializer = QuestionStatusSerializer(marks, many=True)
+        return Response(serializer.data)

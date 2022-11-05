@@ -2,6 +2,7 @@ from django.db import models
 
 
 class InfoToConvey(models.Model):
+    season = models.ForeignKey('Season',on_delete=models.CASCADE)
     student = models.ForeignKey('Candidate', on_delete=models.CASCADE,related_name='student_info')
     information = models.CharField(max_length=500)
     remarks = models.TextField(blank=True, null=True)

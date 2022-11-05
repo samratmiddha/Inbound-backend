@@ -41,7 +41,6 @@ def get_user(username):
 @api_view(('GET',))
 @permission_classes([])
 def check_login(request):
-    print(request.__dict__)
     content = {'Logged_In': False}
     if request.user.is_authenticated:
         serializer = UserInfoSerializer(request.user)

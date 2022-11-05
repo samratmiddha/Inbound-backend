@@ -1,12 +1,22 @@
 import json
-from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.generic.websocket import AsyncJsonWebsocketConsumer
+from asgiref.sync import async_to_sync
 
-class AsyncIMGUser(AsyncWebsocketConsumer):
-    def connect(self):
-        self.accept()
+class AsyncIMGUser(AsyncJsonWebsocketConsumer):
+    async def connect(self):
+        await self.channel_layer.group_add('IMG', self.channel_name)
 
-    def receive(self):
-        pass
+        await self.accept()
 
-    def disconnect(self):
-        pass
+
+    async def receive_json(self,content,**kwargs):
+        print(content)
+        await self.send_json({
+            'data': content.get("msg"),
+        })
+
+    async def disconnect(self , close_code):
+        print('conection closed')
+        async_to_sync(self.channel_layer.group_discard)(
+            'IMG', self.channel_name
+        )

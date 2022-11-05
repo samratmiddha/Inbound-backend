@@ -14,9 +14,9 @@ from rest_framework.response import Response
 class InfoToConveyViewSet(viewsets.ModelViewSet):
     queryset = InfoToConvey.objects.all()
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    filterset_fields = ['student', 'is_conveyed', 'information']
+    filterset_fields = ['student', 'is_conveyed', 'information','season']
     ordering_fields = ['student', 'is_conveyed', 'information']
-    ordering = ['student']
+    ordering = ['is_conveyed']
     permission_classes = [IsAuthenticated]
     allowed_method = ['get', 'post', 'head', 'patch', 'put']
 
