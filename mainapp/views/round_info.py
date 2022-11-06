@@ -3,10 +3,15 @@ from mainapp.models import Round_Info
 from mainapp.models import Section
 from mainapp.models import Sectional_Marks
 from mainapp.models import Question_Status
+from mainapp.models import Question
 from mainapp.serializers import RoundInfoSerializer
 from mainapp.serializers import RoundInfoDefaultSerializer
 from mainapp.serializers import SectionalMarksSerializer
 from mainapp.serializers import QuestionStatusSerializer
+from mainapp.serializers import SectionalMarksDefaultSerializer
+from mainapp.serializers import QuestionStatusDefaultSerializer
+from mainapp.serializers import SectionDefaultSerializer
+from mainapp.serializers import QuestionDefaultSerializer
 
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
@@ -15,6 +20,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework import status
 from django.shortcuts import get_object_or_404
+
 
 
 class RoundInfoViewSet(viewsets.ModelViewSet):
@@ -32,15 +38,32 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
             return RoundInfoSerializer
         return RoundInfoDefaultSerializer
 
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(
-            instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-
-        return Response(RoundInfoDefaultSerializer(instance.parent).data)
+    def post(self, request, format=None):
+        serializer = RoundInfoDefaultSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            section_objects=Section.objects.filter(round=request.data['round'])
+            section_serializer=SectionDefaultSerializer(section_objects,many=True)
+            for section in section_serializer.data:
+                sectional_marks_serializer=SectionalMarksDefaultSerializer(data={
+                'student':request.data['student'],
+                'section':section['id'],
+                'marks':0
+                })
+                if sectional_marks_serializer.is_valid():
+                    sectional_marks_serializer.save()
+                question_objects=Question.objects.filter(section=section['id'])
+                question_serializer=QuestionDefaultSerializer(question_objects,many=True)
+                for question in question_serializer.data:
+                    question_status_serializer =QuestionStatusDefaultSerializer(data={
+                        'question':question['id'],
+                        'student':request.data['student'],
+                        'marks':0
+                    })
+                    if question_status_serializer.is_valid():
+                        question_status_serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
  
 
     @action(methods=['POST'],detail=False,url_name='multiple_create/')
@@ -48,6 +71,26 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
         serializer=self.get_serializer(data=request.data,many=True)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
+        for data in request.data:
+            section_objects=Section.objects.filter(round=data['round'])
+            section_serializer=SectionDefaultSerializer(section_objects,many=True)
+            for section in section_serializer.data:
+                sectional_marks_serializer=SectionalMarksDefaultSerializer(data={
+                'student':data['student'],
+                'section':section['id'],
+                'marks':0
+                })
+                if sectional_marks_serializer.is_valid():
+                    sectional_marks_serializer.save()
+                question_objects=Question.objects.filter(section=section['id'])
+                question_serializer=QuestionDefaultSerializer(question_objects,many=True)
+                for question in question_serializer.data:
+                    question_status_serializer =QuestionStatusDefaultSerializer(data={
+                    'question':question['id'],
+                    'student':data['student'],
+                    'marks':0
+                     })
+                    question_status_serializer.perform_create()
         return Response(serializer.data,status=status.HTTP_201_CREATED)
 
 
@@ -75,6 +118,32 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
                 section_data[section['section']['name']]=section['marks']
                 for question in question_data.data:
                     section_data[question['question']['id']]=question['marks']
+            finalData.append(section_data)
+            
+
+        return Response(finalData)
+    
+
+    @action(methods=['GET'],detail=False,url_name='get_projects_by_round',url_path='get_projects_by_round/(?P<round_id>\d+)')
+    def get_projects_by_round(self,request,round_id):
+        # channel_layer=get_channel_layer()
+        # channel_layer.group_send('IMG',{"msg":'bum bum'})
+        finalData =[]
+        round_objects = Round_Info.objects.filter(round=round_id)
+        round_data = RoundInfoSerializer(round_objects, many=True)
+
+        print(request.user)
+        for round in round_data.data:
+            section_data={}
+            sectional_marks=Sectional_Marks.objects.filter(section__round=round_id, student=round['student']['id'])
+            sectionSerializer=SectionalMarksSerializer(sectional_marks,many=True)
+            section_data['id']=round['id']
+            section_data['student_name']=round['student']['name']
+            section_data['student_id']=round['student']['id']
+            section_data['total_marks']=round['marks_obtained']
+            section_data['submission_link']=round['submission_link']
+            for section in sectionSerializer.data:
+                section_data[section['section']['name']]=section['marks']
             finalData.append(section_data)
             
 

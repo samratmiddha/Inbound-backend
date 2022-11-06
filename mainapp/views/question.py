@@ -5,7 +5,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from mainapp.permissions import FullAccessPermission
 from rest_framework.permissions import IsAuthenticated
-from mainapp.serializers import QuestionDefualtSerializer
+from mainapp.serializers import QuestionDefaultSerializer
 from rest_framework.decorators import action
 from rest_framework import  status
 from rest_framework.response import Response
@@ -24,7 +24,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
             return QuestionSerializer
         if self.action == 'retrieve':
             return QuestionSerializer
-        return QuestionDefualtSerializer
+        return QuestionDefaultSerializer
         
     @action(methods=['POST'],detail=False,url_name='multiple_create/')
     def multiple_create(self,request,*args,**kwargs):
@@ -33,5 +33,6 @@ class QuestionViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
         return Response(serializer.data,status=status.HTTP_201_CREATED)
 
+ 
 
     

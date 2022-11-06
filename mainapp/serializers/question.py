@@ -14,7 +14,7 @@ class QuestionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class QuestionDefualtSerializer(serializers.ModelSerializer):
+class QuestionDefaultSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = '__all__'

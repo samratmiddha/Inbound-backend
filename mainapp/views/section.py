@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from mainapp.models import Section
 from mainapp.models import Question
 from mainapp.serializers import SectionSerializer
-from mainapp.serializers import QuestionDefualtSerializer
+from mainapp.serializers import QuestionDefaultSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework.permissions import IsAuthenticated
@@ -41,26 +41,27 @@ class SectionViewSet(viewsets.ModelViewSet):
         finalData={}
         groups=[]
         columns=[]
-        columns.append({'field':'id' ,'headerName':'Id','flex':5})
+        columns.append({'field':'id' ,'headerName':'Id','flex':5,'type':'number'})
         columns.append({'field':'student_name' ,'headerName':'Name','flex':15})
         columns.append({'field':'student_id' ,'headerName':'SID','flex':10})
-        groups.append({'groupId':'internal','headerName':'Internal','children':[{'field':'id'},{'field':'student_id'},{'field':'student_name'},{'field':'total_marks'}]})
-        columns.append({'field':'total_marks' ,'headerName':'Total','flex':10})
+        groups.append({'groupId':'internal', 'headerClassName': 'my-super-theme--naming-group','headerName':'Internal','children':[{'field':'id'},{'field':'student_id'},{'field':'student_name'},{'field':'total_marks'}]})
+        columns.append({'field':'total_marks' ,'headerName':'Total','flex':10,'type':'number'})
         objects =Section.objects.filter(round=round_id)
         section_data=SectionDefaultSerializer(objects,many=True)
         for section in section_data.data:
             print('jjj')
             group={}
             children=[]
-            columns.append({'field':section['name'] ,'headerName':section['name'],'flex':10})
+            columns.append({'field':section['name'] ,'headerName':section['name'],'flex':10,'type':'number'})
            
             group['groupId']=section['id']
             group['headerName']=section['name']
+            group['headerClassName']='my-super-theme--naming-group'
             question_objects=Question.objects.filter(section=section['id'])
-            question_data =QuestionDefualtSerializer(question_objects,many=True)
+            question_data =QuestionDefaultSerializer(question_objects,many=True)
             children.append({'field':section['name']})
             for question in question_data.data:
-                columns.append({'field':question['id'] ,'headerName':question['question_name'],'flex':10})
+                columns.append({'field':question['id'] ,'headerName':question['question_name'],'flex':10 ,'editable':True,'type':'number'})
                 question_fields={}
                 question_fields['field']=question['id']
                 children.append(question_fields)
@@ -72,4 +73,22 @@ class SectionViewSet(viewsets.ModelViewSet):
         return Response(finalData)
 
 
+    @action(methods=['GET'],detail=False,url_name='get_project_sections',url_path='get_project_sections/(?P<round_id>\d+)')
+    def get_project_sections(self,request,round_id):
+        finalData={}
+        columns=[]
+        columns.append({'field':'id' ,'headerName':'Id','flex':5,'type':'number'})
+        columns.append({'field':'student_name' ,'headerName':'Name','flex':15})
+        columns.append({'field':'student_id' ,'headerName':'SID','flex':10})
+        columns.append({'field':'total_marks' ,'headerName':'Total','flex':10,'type':'number'})
+        columns.append({'field':'submission_link' ,'headerName':'Submission Link','flex':10,})
+        objects =Section.objects.filter(round=round_id)
+        section_data=SectionDefaultSerializer(objects,many=True)
+        for section in section_data.data:
+            print('jjj')
+            columns.append({'field':section['name'] ,'headerName':section['name'],'flex':10,'type':'number'})
+            
+        finalData['columns']=columns
+
+        return Response(finalData)
 

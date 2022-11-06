@@ -9,6 +9,7 @@ class Round_Info(models.Model):
     marks_obtained = models.IntegerField(default=0, blank=True,null= True)
     remarks = models.TextField(blank=True, null=True)
     panel = models.ForeignKey('Interview_Panel', on_delete=models.RESTRICT,blank=True,null=True,related_name='round_panel')
+    submission_link = models.URLField(max_length=300, blank=True, null=True)
 
 class Meta:
     verbose_name_plural='Round_Info'
