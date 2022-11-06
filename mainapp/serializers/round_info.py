@@ -20,3 +20,11 @@ class RoundInfoDefaultSerializer(serializers.ModelSerializer):
     class Meta:
         model = Round_Info
         fields = '__all__'
+
+class RoundInfoJuniorSerializer(serializers.ModelSerializer):
+    student = CandidateContactSerializer()
+    panel = InterviewPanelSerializer()
+    round = RoundSerializer()
+    class Meta:
+        model = Round_Info
+        exclude=['marks_obtained']

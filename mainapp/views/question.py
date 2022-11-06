@@ -17,8 +17,8 @@ class QuestionViewSet(viewsets.ModelViewSet):
     ordering_fields = ['question_text', 'section', 'asignee']
     filterset_fields = ['question_text', 'section', 'asignee']
     ordering = ['question_text']
-    #permission_classes = [FullAccessPermission, IsAuthenticated]
-
+    permission_classes = [FullAccessPermission, IsAuthenticated]
+    
     def get_serializer_class(self):
         if self.action == 'list':
             return QuestionSerializer

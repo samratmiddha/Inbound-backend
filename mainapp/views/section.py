@@ -3,6 +3,7 @@ from mainapp.models import Section
 from mainapp.models import Question
 from mainapp.serializers import SectionSerializer
 from mainapp.serializers import QuestionDefaultSerializer
+from mainapp.permissions import FullAccessPermission
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework.permissions import IsAuthenticated
@@ -19,7 +20,7 @@ class SectionViewSet(viewsets.ModelViewSet):
     ordering_fields = ['round', 'max_marks', 'name', 'weightage']
     filterset_fields = ['round', 'max_marks', 'name', 'weightage']
     ordering = ['round']
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated,FullAccessPermission]
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -82,11 +83,12 @@ class SectionViewSet(viewsets.ModelViewSet):
         columns.append({'field':'student_id' ,'headerName':'SID','flex':10})
         columns.append({'field':'total_marks' ,'headerName':'Total','flex':10,'type':'number'})
         columns.append({'field':'submission_link' ,'headerName':'Submission Link','flex':10,})
+        columns.append({'field':'panel' ,'headerName':'Panel','flex':10,})
         objects =Section.objects.filter(round=round_id)
         section_data=SectionDefaultSerializer(objects,many=True)
         for section in section_data.data:
             print('jjj')
-            columns.append({'field':section['name'] ,'headerName':section['name'],'flex':10,'type':'number'})
+            columns.append({'field':section['name'] ,'headerName':section['name'],'flex':10,'type':'number','editable':True})
             
         finalData['columns']=columns
 

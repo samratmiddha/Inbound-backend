@@ -7,6 +7,7 @@ from rest_framework import filters
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework import  status
+from mainapp.permissions import ReadOnly,FullAccessPermission
 
 
 
@@ -15,8 +16,8 @@ class InterviewPanelViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     ordering_fields = ['members', 'season', 'is_active', 'location', 'type']
     filterset_fields = ['members', 'season', 'is_active', 'location', 'type']
-    ordering = ['is_active']
-    permission_classes = [IsAuthenticated]
+    ordering = ['-is_active']
+    permission_classes = [IsAuthenticated,FullAccessPermission|ReadOnly]
 
     def get_serializer_class(self):
         if self.action == 'list':

@@ -7,6 +7,7 @@ from rest_framework import filters
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework import  status
+from mainapp.permissions import ReadOnly,FullAccessPermission
 
 
 
@@ -16,7 +17,7 @@ class RoundViewSet(viewsets.ModelViewSet):
     ordering_fields = ['name', 'season', 'type', 'start_date', 'end_date']
     filterset_fields = ['name', 'season', 'type', 'start_date', 'end_date']
     ordering = ['name']
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated,FullAccessPermission|ReadOnly]
 
     def get_serializer_class(self):
         if self.action == 'list':

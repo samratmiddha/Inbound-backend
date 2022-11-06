@@ -9,7 +9,6 @@ from django.http import HttpResponse, HttpRequest, HttpResponseForbidden
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.backends import BaseBackend
-from mainapp.permissions import FullAccessPermission
 from decouple import config
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from mainapp.serializers import UserInfoSerializer

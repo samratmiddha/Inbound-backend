@@ -3,7 +3,7 @@ from mainapp.models import Question_Status
 from mainapp.serializers import QuestionStatusSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
-from mainapp.permissions import FullAccessPermission
+from mainapp.permissions import FullAccessQuestionMarksPermission
 from rest_framework.permissions import IsAuthenticated
 from mainapp.serializers import QuestionStatusDefaultSerializer
 from rest_framework.decorators import action
@@ -20,7 +20,7 @@ class QuestionStatusViewSet(viewsets.ModelViewSet):
     filterset_fields = ['question', 'student',
                         'marks', 'normalized_marks', 'is_checked']
     ordering = ['marks']
-    # permission_classes = [FullAccessPermission, IsAuthenticated]
+    permission_classes = [FullAccessQuestionMarksPermission, IsAuthenticated]
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -28,6 +28,18 @@ class QuestionStatusViewSet(viewsets.ModelViewSet):
         if self.action == 'retrieve':
             return QuestionStatusSerializer
         return QuestionStatusDefaultSerializer
+
+    def get(self,request):
+        objects = Question_Status.objects.all()
+        Serializer = get_serializer_class(self)
+        valid_pks= []  
+        for object in objects:
+            if FullAccessQuestionMarksPermission.has_object_permission(self,request, object):
+                valid_pks.append(object.pk)
+        filtered_objects=Question_Status.objects.filter(pk__in=valid_pks)
+        serializer=Serializer(filtered_objects)
+        return Response(serializer.data)
+
     @action(methods=['POST'],detail=False,url_name='multiple_create/')
     def multiple_create(self,request,*args,**kwargs):
         serializer=self.get_serializer(data=request.data,many=True)
@@ -50,10 +62,4 @@ class QuestionStatusViewSet(viewsets.ModelViewSet):
         return Response('hii')
 
 
-    @action(methods=['GET'],detail=False,url_name='get_marks_by_round',url_path='get_marks_by_round/(?P<round_id>\d+)')
-    def get_marks_by_round(self,request,round_id):
-        # channel_layer=get_channel_layer()
-        # channel_layer.group_send('IMG',{"msg":'bum bum'})
-        marks = Question_Status.objects.filter(section__round=round_id)
-        serializer = QuestionStatusSerializer(marks, many=True)
-        return Response(serializer.data)
+    

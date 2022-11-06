@@ -6,6 +6,8 @@ from rest_framework import filters
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework import  status
+from mainapp.permissions import FullAccessPermission,ReadOnly
+ 
 
 
 
@@ -16,7 +18,7 @@ class SeasonViewSet(viewsets.ModelViewSet):
     ordering_fields = ['name', 'session', 'is_ongoing', 'season_type']
     filterset_fields = ['name', 'session', 'is_ongoing', 'season_type']
     ordering = ['session']
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated,FullAccessPermission|ReadOnly]
 
     @action(methods=['POST'],detail=False,url_name='multiple_create/')
     def multiple_create(self,request,*args,**kwargs):
