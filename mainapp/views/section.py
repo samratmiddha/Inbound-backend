@@ -1,9 +1,15 @@
 from rest_framework import viewsets
 from mainapp.models import Section
 from mainapp.models import Question
+from mainapp.models import Sectional_Marks
+from mainapp.models import Round_Info
 from mainapp.serializers import SectionSerializer
 from mainapp.serializers import QuestionDefaultSerializer
+from mainapp.serializers import RoundInfoDefaultSerializer
+from mainapp.serializers import SectionalMarksDefaultSerializer
+from mainapp.serializers import RoundInfoSerializer
 from mainapp.permissions import FullAccessPermission
+from mainapp.serializers import QuestionSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework.permissions import IsAuthenticated
@@ -28,6 +34,24 @@ class SectionViewSet(viewsets.ModelViewSet):
         if self.action == 'retrieve':
             return SectionSerializer
         return SectionDefaultSerializer
+
+    def create(self, request, format=None):
+        serializer = SectionDefaultSerializer(data=request.data)
+        print('ooo')
+        if serializer.is_valid():
+            instance =serializer.save()
+            round_info_objects =Round_Info.objects.filter(round=request.data['round'])
+            round_info_serializer= RoundInfoSerializer(round_info_objects,many=True)
+            for round_info in round_info_serializer.data:
+                sectional_marks_serializer=SectionalMarksDefaultSerializer(data={
+                'student':round_info['student']['id'],
+                'section':instance.id,
+                })
+                if sectional_marks_serializer.is_valid():
+                    sectional_marks_serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+ 
  
     @action(methods=['POST'],detail=False,url_name='multiple_create/')
     def multiple_create(self,request,*args,**kwargs):
@@ -93,4 +117,6 @@ class SectionViewSet(viewsets.ModelViewSet):
         finalData['columns']=columns
 
         return Response(finalData)
+
+    
 

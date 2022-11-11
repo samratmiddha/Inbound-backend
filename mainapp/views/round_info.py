@@ -60,7 +60,7 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-    def post(self, request, format=None):
+    def create(self, request, format=None):
         serializer = RoundInfoDefaultSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -73,7 +73,7 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
                 'marks':0
                 })
                 if sectional_marks_serializer.is_valid():
-                    sectional_marks_serializer.save()
+                    sectional_marks_serializer.validated_data.save()
                 question_objects=Question.objects.filter(section=section['id'])
                 question_serializer=QuestionDefaultSerializer(question_objects,many=True)
                 for question in question_serializer.data:
@@ -83,7 +83,7 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
                         'marks':0
                     })
                     if question_status_serializer.is_valid():
-                        question_status_serializer.save()
+                        question_status_serializer.validated_data.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
  
@@ -179,7 +179,8 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
             section_data['student_name']=round['student']['name']
             section_data['student_id']=round['student']['id']
             section_data['submission_link']=round['submission_link']
-            section_data['panel']=round['panel']['location']
+            if round['panel'] is not None:
+                section_data['panel']=round['panel']['location']
             section_data['total_marks']=round['marks_obtained']
             for section in sectionSerializer.data:
                 section_data[section['section']['name']]=section['marks']
