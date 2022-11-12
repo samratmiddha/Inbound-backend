@@ -3,7 +3,7 @@ from rest_framework import serializers
 from mainapp.serializers.candidate import CandidateContactSerializer
 from mainapp.serializers.interview_panel import InterviewPanelSerializer
 from mainapp.serializers.round import RoundSerializer
-from mainapp.models import Round_Info
+from ..models.round_info import Round_Info
 
 
 class RoundInfoSerializer(serializers.ModelSerializer):
@@ -27,4 +27,4 @@ class RoundInfoJuniorSerializer(serializers.ModelSerializer):
     round = RoundSerializer()
     class Meta:
         model = Round_Info
-        exclude=['marks_obtained']
+        exclude=['_marks_obtained']

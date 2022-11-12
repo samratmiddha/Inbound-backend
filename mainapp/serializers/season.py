@@ -1,6 +1,6 @@
 
 from rest_framework import serializers
-from mainapp.models import Season
+from ..models.season import Season
 
 
 class SeasonSerializer(serializers.ModelSerializer):

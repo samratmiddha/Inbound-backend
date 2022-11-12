@@ -1,8 +1,8 @@
 
 from rest_framework import serializers
-from mainapp.serializers.season import SeasonNameSerializer
-from mainapp.serializers.round import RoundSerializer
-from mainapp.models import Candidate
+from .season import SeasonNameSerializer
+from .round import RoundSerializer
+from ..models.candidate import Candidate
 
 
 class CandidateSerializer(serializers.ModelSerializer):

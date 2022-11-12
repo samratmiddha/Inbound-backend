@@ -4,15 +4,15 @@ from mainapp.models import Section
 from mainapp.models import Sectional_Marks
 from mainapp.models import Question_Status
 from mainapp.models import Question
-from mainapp.serializers import RoundInfoSerializer
-from mainapp.serializers import RoundInfoDefaultSerializer
+from mainapp.serializers.round_info import RoundInfoSerializer
+from mainapp.serializers.round_info import RoundInfoDefaultSerializer
 from mainapp.serializers import SectionalMarksSerializer
 from mainapp.serializers import QuestionStatusSerializer
 from mainapp.serializers import SectionalMarksDefaultSerializer
 from mainapp.serializers import QuestionStatusDefaultSerializer
 from mainapp.serializers import SectionDefaultSerializer
 from mainapp.serializers import QuestionDefaultSerializer
-from mainapp.serializers import RoundInfoJuniorSerializer
+from mainapp.serializers.round_info import RoundInfoJuniorSerializer
 from mainapp.permissions import FullAccessRoundMarksPermission
 
 from django_filters.rest_framework import DjangoFilterBackend
@@ -33,7 +33,7 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     ordering_fields = ['student', 'round', 'panel','marks_obtained']
     filterset_fields = ['student', 'round', 'panel']
-    ordering = ['-marks_obtained']
+    ordering = ['-_marks_obtained']
     permission_classes = [IsAuthenticated,]
 
      
@@ -104,7 +104,7 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
                 'marks':0
                 })
                 if sectional_marks_serializer.is_valid():
-                    sectional_marks_serializer.validated_data.save()
+                    sectional_marks_serializer.save()
                 question_objects=Question.objects.filter(section=section['id'])
                 question_serializer=QuestionDefaultSerializer(question_objects,many=True)
                 for question in question_serializer.data:
@@ -114,7 +114,7 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
                     'marks':0
                      })
                     if question_status_serializer.is_valid():
-                        question_status_serializer.validated_data.save()
+                        question_status_serializer.save()
 
         return Response(serializer.data,status=status.HTTP_201_CREATED)
 
@@ -137,7 +137,7 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
         if filter_field=='total_marks':     
             count = round_filtered_objects.count()
             required_students=math.floor((percent*count)/100)
-            round_pfiltered_objects=Round_Info.objects.filter(pk__in=valid_pks).order_by('-marks_obtained')[:required_students]
+            round_pfiltered_objects=Round_Info.objects.filter(pk__in=valid_pks).order_by('-_marks_obtained')[:required_students]
         else:
             round_pfiltered_objects = round_filtered_objects
         
@@ -151,15 +151,15 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
             section_data['id']=round['id']
             section_data['student_name']=round['student']['name']
             section_data['student_id']=round['student']['id']
-            section_data['total_marks']=round['marks_obtained']
+            section_data['total_marks']=round['_marks_obtained']
             for section in sectionSerializer.data:
                 print(section['id'])
-                if filter_field=='total_marks':     
-                    student_count = sectional_marks.count()
-                    required_section_students=math.floor((percent*student_count)/100)
-                    round_pfiltered_objects=Round_Info.objects.filter(pk__in=valid_pks).order_by('-marks_obtained')[:required_students]
-                else:
-                    round_pfiltered_objects = round_filtered_objects
+                # if filter_field=='total_marks':     
+                #     student_count = sectional_marks.count()
+                #     required_section_students=math.floor((percent*student_count)/100)
+                #     round_pfiltered_objects=Round_Info.objects.filter(pk__in=valid_pks).order_by('-marks_obtained')[:required_students]
+                # else:
+                #     round_pfiltered_objects = round_filtered_objects
                 question_objects=Question_Status.objects.filter(question__section=section['section']['id'], student=section['student']['id'])
                 question_data=QuestionStatusSerializer(question_objects,many=True)
                 section_data[section['section']['name']]=section['marks']

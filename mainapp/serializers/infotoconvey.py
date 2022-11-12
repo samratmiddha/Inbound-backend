@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from mainapp.models import InfoToConvey
+from ..models.infotoconvey import InfoToConvey
 from mainapp.serializers.candidate import CandidateContactSerializer
 
 class InfoToConveySerializer(serializers.ModelSerializer):

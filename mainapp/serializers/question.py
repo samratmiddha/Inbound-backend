@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from mainapp.serializers.section import SectionNameSerializer
 from mainapp.serializers.user import UserNameSerializer
-from mainapp.models import Question
+from ..models.question import Question
 
 
 class QuestionSerializer(serializers.ModelSerializer):

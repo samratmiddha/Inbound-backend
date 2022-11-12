@@ -3,7 +3,7 @@ from mainapp.models import Question
 from mainapp.models import Round_Info
 from mainapp.models import Sectional_Marks
 from mainapp.models import Section
-from mainapp.serializers import RoundInfoSerializer
+from mainapp.serializers.round_info import RoundInfoSerializer
 from mainapp.serializers import QuestionStatusDefaultSerializer
 from mainapp.serializers import QuestionSerializer
 from mainapp.serializers import SectionalMarksSerializer

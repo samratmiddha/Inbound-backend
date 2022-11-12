@@ -1,7 +1,7 @@
 
 from rest_framework import serializers
 from mainapp.serializers.round import RoundNameSerializer
-from mainapp.models import Section
+from ..models.section import Section
 
 
 class SectionSerializer(serializers.ModelSerializer):

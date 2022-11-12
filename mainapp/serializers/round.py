@@ -1,6 +1,6 @@
 
 from rest_framework import serializers
-from mainapp.models import Round
+from ..models.round import Round
 from mainapp.serializers.season import SeasonNameSerializer
 
 

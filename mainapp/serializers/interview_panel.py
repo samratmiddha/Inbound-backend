@@ -1,7 +1,7 @@
 
 from rest_framework import serializers
 from mainapp.serializers.user import UserNameSerializer
-from mainapp.models import Interview_Panel
+from ..models.interview_panel import Interview_Panel
 
 
 class InterviewPanelSerializer(serializers.ModelSerializer):
