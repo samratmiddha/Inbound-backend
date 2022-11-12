@@ -1,8 +1,8 @@
 
 from rest_framework import serializers
-from mainapp.serializers.candidate import CandidateNameSerializer
-from mainapp.serializers.section import SectionNameSerializer
-from mainapp.models import Sectional_Marks
+from .candidate import CandidateNameSerializer
+from .section import SectionNameSerializer
+from ..models.sectional_marks import Sectional_Marks
 
 
 class SectionalMarksSerializer(serializers.ModelSerializer):

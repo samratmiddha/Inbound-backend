@@ -1,5 +1,6 @@
 from django.db import models
-
+# from .sectional_marks import Sectional_Marks
+# from ..serializers.sectional_marks import SectionalMarksSerializer
 
 class Round_Info(models.Model):
     student = models.ForeignKey('Candidate', on_delete=models.CASCADE,related_name='round_student_info')
@@ -17,3 +18,15 @@ class Meta:
 
 def __str__(self):
     return f"{self.student}-{self.round}"
+
+
+# @property
+# def marks(self):
+#     queryset=Sectional_Marks.objects.filter(student=self.student,section__round=self.round)
+#     serializer=SectionalMarksSerializer(queryset,many=True)
+#     total_marks=0
+#     for section_info in serializer.data:
+#         if(section_info['marks']!=None):
+#             total_marks+=section_info['marks']
+#     self.marks_obtained=total_marks
+

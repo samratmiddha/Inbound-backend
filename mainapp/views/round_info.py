@@ -24,6 +24,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 import rest_framework.permissions as drf_permissions
+import math
 
 
 
@@ -73,7 +74,7 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
                 'marks':0
                 })
                 if sectional_marks_serializer.is_valid():
-                    sectional_marks_serializer.validated_data.save()
+                    sectional_marks_serializer.save()
                 question_objects=Question.objects.filter(section=section['id'])
                 question_serializer=QuestionDefaultSerializer(question_objects,many=True)
                 for question in question_serializer.data:
@@ -83,7 +84,7 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
                         'marks':0
                     })
                     if question_status_serializer.is_valid():
-                        question_status_serializer.validated_data.save()
+                        question_status_serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
  
@@ -121,9 +122,11 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
     def get_marks_by_round(self,request,round_id):
         # channel_layer=get_channel_layer()
         # channel_layer.group_send('IMG',{"msg":'bum bum'})
+        filter_field=self.request.query_params.get('filter-field')
+        percent=int(self.request.query_params.get('percent'))
         finalData =[]
         round_objects = Round_Info.objects.filter(round=round_id)
-        
+       
         valid_pks= []  # # storage for keys of valid objects
         # permissions: List[drf_permissions.BasePermission] = self.get_permissions()
         for object in round_objects:
@@ -131,7 +134,14 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
                 valid_pks.append(object.pk)
 
         round_filtered_objects=Round_Info.objects.filter(pk__in=valid_pks)
-        round_data = RoundInfoSerializer(round_filtered_objects, many=True)
+        if filter_field=='total_marks':     
+            count = round_filtered_objects.count()
+            required_students=math.floor((percent*count)/100)
+            round_pfiltered_objects=Round_Info.objects.filter(pk__in=valid_pks).order_by('-marks_obtained')[:required_students]
+        else:
+            round_pfiltered_objects = round_filtered_objects
+        
+        round_data = RoundInfoSerializer(round_pfiltered_objects, many=True)
 
         print(request.user)
         for round in round_data.data:
@@ -144,6 +154,12 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
             section_data['total_marks']=round['marks_obtained']
             for section in sectionSerializer.data:
                 print(section['id'])
+                if filter_field=='total_marks':     
+                    student_count = sectional_marks.count()
+                    required_section_students=math.floor((percent*student_count)/100)
+                    round_pfiltered_objects=Round_Info.objects.filter(pk__in=valid_pks).order_by('-marks_obtained')[:required_students]
+                else:
+                    round_pfiltered_objects = round_filtered_objects
                 question_objects=Question_Status.objects.filter(question__section=section['section']['id'], student=section['student']['id'])
                 question_data=QuestionStatusSerializer(question_objects,many=True)
                 section_data[section['section']['name']]=section['marks']
