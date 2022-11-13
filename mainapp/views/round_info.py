@@ -6,9 +6,9 @@ from mainapp.models import Question_Status
 from mainapp.models import Question
 from mainapp.serializers.round_info import RoundInfoSerializer
 from mainapp.serializers.round_info import RoundInfoDefaultSerializer
-from mainapp.serializers import SectionalMarksSerializer
+from mainapp.serializers.sectional_marks import SectionalMarksSerializer
 from mainapp.serializers import QuestionStatusSerializer
-from mainapp.serializers import SectionalMarksDefaultSerializer
+from mainapp.serializers.sectional_marks import SectionalMarksDefaultSerializer
 from mainapp.serializers import QuestionStatusDefaultSerializer
 from mainapp.serializers import SectionDefaultSerializer
 from mainapp.serializers import QuestionDefaultSerializer
@@ -126,10 +126,11 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
         percent=int(self.request.query_params.get('percent'))
         finalData =[]
         round_objects = Round_Info.objects.filter(round=round_id)
-       
+        
         valid_pks= []  # # storage for keys of valid objects
         # permissions: List[drf_permissions.BasePermission] = self.get_permissions()
         for object in round_objects:
+            object.marks_obtained
             if FullAccessRoundMarksPermission.has_object_permission(self,request, object):
                 valid_pks.append(object.pk)
 
@@ -142,7 +143,9 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
             round_pfiltered_objects = round_filtered_objects
         
         round_data = RoundInfoSerializer(round_pfiltered_objects, many=True)
-
+        # for object in round_pfiltered_objects:
+        #     print(object.marks_obtained)
+        
         print(request.user)
         for round in round_data.data:
             section_data={}
@@ -180,6 +183,7 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
         valid_pks= []  # # storage for keys of valid objects
         # permissions: List[drf_permissions.BasePermission] = self.get_permissions()
         for object in round_objects:
+            object.marks_obtained
             if FullAccessRoundMarksPermission.has_object_permission(self,request, object):
                 valid_pks.append(object.pk)
 

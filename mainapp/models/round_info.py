@@ -12,32 +12,34 @@ class Round_Info(models.Model):
     panel = models.ForeignKey('Interview_Panel', on_delete=models.RESTRICT,blank=True,null=True,related_name='round_panel')
     submission_link = models.URLField(max_length=300, blank=True, null=True)
 
-class Meta:
-    verbose_name_plural='Round_Info'
-    verbose_name='Round_Info'
+    class Meta:
+        verbose_name_plural='Round_Info'
+        verbose_name='Round_Info'
 
-def __str__(self):
-    return f"{self.student}-{self.round}"
-
-
-
-@property
-def marks_obtained(self):
-    return self._marks_obtained
+    def __str__(self):
+        return f"{self.student}-{self.round}"
 
 
-@marks_obtained.setter
-def marks_obtained(self):
-    queryset=Sectional_Marks.objects.filter(student=self.student,section__round=self.round)
-    serializer=SectionalMarksDefaultSerializer(queryset,many=True)
-    total_marks=0
-    for section_info in serializer.data:
-        if(section_info['marks']!=None):
-            total_marks+=section_info['marks']
-    self._marks_obtained=total_marks
-    print('bbb')
-    print(total_marks)
-    return total_marks
+
+    # @property
+    # def marks_obtained(self):
+    #     return self._marks_obtained
+
+
+    @property
+    def marks_obtained(self):
+        queryset=Sectional_Marks.objects.filter(student=self.student,section__round=self.round)
+        serializer=SectionalMarksDefaultSerializer(queryset,many=True)
+        total_marks=0
+        for section_info in serializer.data:
+            if(section_info['marks']!=None):
+                total_marks+=section_info['marks']
+        self._marks_obtained=total_marks
+        self.save()
+
+        print('bbb')
+        print(total_marks)
+        return total_marks
 
 
 

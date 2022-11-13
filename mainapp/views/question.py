@@ -6,7 +6,7 @@ from mainapp.models import Section
 from mainapp.serializers.round_info import RoundInfoSerializer
 from mainapp.serializers import QuestionStatusDefaultSerializer
 from mainapp.serializers import QuestionSerializer
-from mainapp.serializers import SectionalMarksSerializer
+from mainapp.serializers.sectional_marks import SectionalMarksSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from mainapp.permissions import FullAccessPermission
