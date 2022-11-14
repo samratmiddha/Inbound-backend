@@ -52,7 +52,22 @@ class SectionViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
  
- 
+    def destroy(self,request,pk,*args,**kwargs):
+        instance =Section.objects.get(pk=pk)
+        serializer=SectionDefaultSerializer(instance)
+        instance.delete()
+        print('nnnnnnnnnnnnnnnnnnnnnnnn')
+        print(serializer.data)
+        print('nnnnnnnnnnnnnnnnnnnnnnnn')
+        section_marks_objects=Sectional_Marks.objects.filter(section__round=serializer.data['round'])
+        round_info_objects=Round_Info.objects.filter(round=serializer.data['round'])
+        for section_marks_object in section_marks_objects:
+            section_marks_object.sectional_marks
+        for round_info_object in round_info_objects:
+            round_info_object.marks_obtained
+        
+        return Response({'msg':'successfully deleted'})
+        
     @action(methods=['POST'],detail=False,url_name='multiple_create/')
     def multiple_create(self,request,*args,**kwargs):
         serializer=self.get_serializer(data=request.data,many=True)

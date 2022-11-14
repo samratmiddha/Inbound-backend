@@ -17,8 +17,9 @@ from rest_framework.decorators import action
 from rest_framework import  status
 from rest_framework.response import Response
 from django.http import JsonResponse
-from channels.layers import get_channel_layer
 import json
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 class QuestionStatusViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
@@ -40,6 +41,7 @@ class QuestionStatusViewSet(viewsets.ModelViewSet):
     def update(self,request,pk,*args,**kwargs):
         object = Question_Status.objects.get(pk=pk)
         serializer=QuestionStatusDefaultSerializer(object,data=request.data,partial=True)
+        
         if serializer.is_valid():
             serializer.save()
         else:
@@ -55,6 +57,14 @@ class QuestionStatusViewSet(viewsets.ModelViewSet):
             object.sectional_marks
         for round_info_object in round_info_objects:
             round_info_object.marks_obtained
+        channel_layer=get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+        'IMG',
+        {
+        'type':'echo_message',
+        'message': 'Test message'
+        }
+)
         return Response(serializer.data)
 
         

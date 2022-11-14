@@ -134,10 +134,13 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
             if FullAccessRoundMarksPermission.has_object_permission(self,request, object):
                 valid_pks.append(object.pk)
 
-        round_filtered_objects=Round_Info.objects.filter(pk__in=valid_pks)
-        if filter_field=='total_marks':     
-            count = round_filtered_objects.count()
-            required_students=math.floor((percent*count)/100)
+        round_filtered_objects=Round_Info.objects.filter(pk__in=valid_pks)  
+        count = round_filtered_objects.count()
+        required_students=math.floor((percent*count)/100)
+        print('suuuuuuuuuuuuuuuuuuuuuuuuuuuuu')
+        print(required_students)
+        print('suuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu')
+        if filter_field=='total_marks':
             round_pfiltered_objects=Round_Info.objects.filter(pk__in=valid_pks).order_by('-_marks_obtained')[:required_students]
         else:
             round_pfiltered_objects = round_filtered_objects
@@ -150,25 +153,40 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
         for round in round_data.data:
             section_data={}
             sectional_marks=Sectional_Marks.objects.filter(section__round=round_id, student=round['student']['id'])
+            include=True
             sectionSerializer=SectionalMarksSerializer(sectional_marks,many=True)
             section_data['id']=round['id']
             section_data['student_name']=round['student']['name']
             section_data['student_id']=round['student']['id']
             section_data['total_marks']=round['_marks_obtained']
+            
             for section in sectionSerializer.data:
                 print(section['id'])
-                # if filter_field=='total_marks':     
-                #     student_count = sectional_marks.count()
-                #     required_section_students=math.floor((percent*student_count)/100)
-                #     round_pfiltered_objects=Round_Info.objects.filter(pk__in=valid_pks).order_by('-marks_obtained')[:required_students]
-                # else:
-                #     round_pfiltered_objects = round_filtered_objects
                 question_objects=Question_Status.objects.filter(question__section=section['section']['id'], student=section['student']['id'])
                 question_data=QuestionStatusSerializer(question_objects,many=True)
                 section_data[section['section']['name']]=section['marks']
+                if filter_field==section['section']['name']:
+                    sectional_marks_objects=Sectional_Marks.objects.filter(section=section['section']['id']).order_by('-marks')[:required_students]
+                    sectional_marks_pserializer=SectionalMarksDefaultSerializer(sectional_marks_objects,many=True)
+                    include=False
+                    print(sectional_marks_pserializer.data)
+                    for sectional_pmark in sectional_marks_pserializer.data:
+                        if section['id']==sectional_pmark['id']:
+                            include=True
+
                 for question in question_data.data:
                     section_data[question['question']['id']]=question['marks']
-            finalData.append(section_data)
+                    if filter_field==question['question']['id']:
+                        question_marks_objects=Question_Status.objects.filter(question=question['question']['id']).order_by('-marks')[:required_students]
+                        question_marks_pserializer=QuestionStatusSerializer(question_marks_objects,many=True)
+                        include=False
+                        print(question_marks_pserializer.data)
+                        for question_pmark in question_marks_pserializer.data:
+                            if question['id']==question_pmark['id']:
+                                include=True
+
+            if include==True:
+                finalData.append(section_data)
             
 
         return Response(finalData)
@@ -201,7 +219,7 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
             section_data['submission_link']=round['submission_link']
             if round['panel'] is not None:
                 section_data['panel']=round['panel']['location']
-            section_data['total_marks']=round['marks_obtained']
+            section_data['total_marks']=round['_marks_obtained']
             for section in sectionSerializer.data:
                 section_data[section['section']['name']]=section['marks']
             finalData.append(section_data)

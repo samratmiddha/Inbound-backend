@@ -32,6 +32,21 @@ class QuestionViewSet(viewsets.ModelViewSet):
             return QuestionSerializer
         return QuestionDefaultSerializer
         
+    def destroy(self,request,pk,*args,**kwargs):
+        instance =Question.objects.get(pk=pk)
+        serializer=QuestionSerializer(instance)
+        instance.delete()
+        print('nnnnnnnnnnnnnnnnnnnnnnnn')
+        print(serializer.data)
+        print('nnnnnnnnnnnnnnnnnnnnnnnn')
+        section_marks_objects=Sectional_Marks.objects.filter(section_=serializer.data['section']['id'])
+        round_info_objects=Round_Info.objects.filter(round=serializer.data['section']['round']['id'])
+        for section_marks_object in section_marks_objects:
+            section_marks_object.sectional_marks
+        for round_info_object in round_info_objects:
+            round_info_object.marks_obtained
+        
+        return Response({'msg':'successfully deleted'})
 
     def create(self, request, format=None):
         serializer = QuestionDefaultSerializer(data=request.data)
