@@ -16,4 +16,4 @@ class UserNameSerializer(serializers.ModelSerializer):
 class UserInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model=get_user_model()
-        fields=['name','enrolment_number','username','email','year']
+        fields=['name','enrolment_number','username','email','year',]

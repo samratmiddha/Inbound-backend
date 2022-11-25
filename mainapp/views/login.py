@@ -82,7 +82,7 @@ def get_token(request):
 
     response = requests.get(
         'https://channeli.in/open_auth/get_user_data/', headers=authorization_data)
-
+    print(response.json())
     is_member = False
     name = response.json()['person']['fullName']
     username = response.json()['username']

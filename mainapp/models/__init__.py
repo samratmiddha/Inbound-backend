@@ -9,3 +9,4 @@ from .round import Round
 from .season import Season
 from .section import Section
 from .sectional_marks import Sectional_Marks
+from .chats import Chats

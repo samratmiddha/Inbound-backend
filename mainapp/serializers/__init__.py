@@ -7,3 +7,4 @@ from .round import *
 from .season import *
 from .section import *
 from .user import *
+from .chats import *
