@@ -16,7 +16,7 @@ class ChatViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     ordering_fields = ['time']
     filterset_fields = ['time']
-    ordering = ['time']
+    ordering = ['-time']
     permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
