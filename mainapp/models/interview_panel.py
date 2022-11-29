@@ -9,6 +9,7 @@ class Interview_Panel(models.Model):
     is_active = models.BooleanField(default=False)
     location = models.CharField(max_length=200)
     type=models.CharField(max_length=4,choices=PANEL_TYPE_CHOICES,null=True)
+    current_student=models.ForeignKey('Candidate',on_delete=models.CASCADE,null=True,blank=True)
 
     
     class Meta:
