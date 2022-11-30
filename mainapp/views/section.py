@@ -81,27 +81,27 @@ class SectionViewSet(viewsets.ModelViewSet):
         finalData={}
         groups=[]
         columns=[]
-        columns.append({'field':'id' ,'headerName':'Id','flex':5,'type':'number'})
-        columns.append({'field':'student_name' ,'headerName':'Name','flex':15})
-        columns.append({'field':'student_id' ,'headerName':'SID','flex':10})
-        groups.append({'groupId':'internal', 'headerClassName': 'my-super-theme--naming-group','headerName':'Internal','children':[{'field':'id'},{'field':'student_id'},{'field':'student_name'},{'field':'total_marks'}]})
-        columns.append({'field':'total_marks' ,'headerName':'Total','flex':10,'type':'number'})
+        columns.append({'field':'id' ,'headerName':'Id','flex':5,'type':'number','headerClassName':'headers'})
+        columns.append({'field':'student_name' ,'headerName':'Name','flex':15,'headerClassName':'headers'})
+        columns.append({'field':'student_id' ,'headerName':'SID','flex':10,'headerClassName':'headers'})
+        groups.append({'groupId':'internal', 'headerClassName': 'headers','headerName':'Internal','children':[{'field':'id'},{'field':'student_id'},{'field':'student_name'},{'field':'total_marks'}]})
+        columns.append({'field':'total_marks' ,'headerName':'Total','flex':10,'type':'number','headerClassName':'headers'})
         objects =Section.objects.filter(round=round_id)
         section_data=SectionDefaultSerializer(objects,many=True)
         for section in section_data.data:
             print('jjj')
             group={}
             children=[]
-            columns.append({'field':section['name'] ,'headerName':section['name'],'flex':10,'type':'number'})
+            columns.append({'field':section['name'] ,'headerName':section['name'],'flex':10,'type':'number','headerClassName':'headers'})
            
             group['groupId']=section['id']
             group['headerName']=section['name']
-            group['headerClassName']='my-super-theme--naming-group'
+            group['headerClassName']='headers'
             question_objects=Question.objects.filter(section=section['id'])
             question_data =QuestionDefaultSerializer(question_objects,many=True)
             children.append({'field':section['name']})
             for question in question_data.data:
-                columns.append({'field':question['id'] ,'headerName':question['question_name'],'flex':10 ,'editable':True,'type':'number'})
+                columns.append({'field':question['id'] ,'headerName':question['question_name'],'flex':10 ,'editable':True,'type':'number','headerClassName':'headers'})
                 question_fields={}
                 question_fields['field']=question['id']
                 children.append(question_fields)
@@ -117,17 +117,17 @@ class SectionViewSet(viewsets.ModelViewSet):
     def get_project_sections(self,request,round_id):
         finalData={}
         columns=[]
-        columns.append({'field':'id' ,'headerName':'Id','flex':5,'type':'number'})
-        columns.append({'field':'student_name' ,'headerName':'Name','flex':15})
-        columns.append({'field':'student_id' ,'headerName':'SID','flex':10})
-        columns.append({'field':'total_marks' ,'headerName':'Total','flex':10,'type':'number'})
-        columns.append({'field':'submission_link' ,'headerName':'Submission Link','flex':10,})
-        columns.append({'field':'panel' ,'headerName':'Panel','flex':10,})
+        columns.append({'field':'id' ,'headerName':'Id','flex':5,'type':'number','headerClassName':'headers'})
+        columns.append({'field':'student_name' ,'headerName':'Name','flex':15,'headerClassName':'headers'})
+        columns.append({'field':'student_id' ,'headerName':'SID','flex':10,'headerClassName':'headers'})
+        columns.append({'field':'total_marks' ,'headerName':'Total','flex':10,'type':'number','headerClassName':'headers'})
+        columns.append({'field':'submission_link' ,'headerName':'Submission Link','flex':10,'headerClassName':'headers'})
+        columns.append({'field':'panel' ,'headerName':'Panel','flex':10,'headerClassName':'headers'})
         objects =Section.objects.filter(round=round_id)
         section_data=SectionDefaultSerializer(objects,many=True)
         for section in section_data.data:
             print('jjj')
-            columns.append({'field':section['name'] ,'headerName':section['name'],'flex':10,'type':'number','editable':True})
+            columns.append({'field':section['name'] ,'headerName':section['name'],'flex':10,'type':'number','editable':True,'headerClassName':'headers'})
             
         finalData['columns']=columns
 
