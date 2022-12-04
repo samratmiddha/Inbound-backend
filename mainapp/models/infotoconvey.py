@@ -7,6 +7,7 @@ class InfoToConvey(models.Model):
     information = models.CharField(max_length=500)
     remarks = models.TextField(blank=True, null=True)
     is_conveyed = models.BooleanField(default=False)
+    round_info = models.ForeignKey('Round_Info',on_delete=models.CASCADE,blank=True)
 
     class Meta:
         verbose_name_plural='InfoToConvey'

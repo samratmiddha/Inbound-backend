@@ -90,6 +90,12 @@ TEMPLATES = [
 WSGI_APPLICATION = 'Inbound.wsgi.application'
 ASGI_APPLICATION = 'Inbound.asgi.application'
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'iammiddha@gmail.com'
+EMAIL_HOST_PASSWORD = 'ogvmwxocnltakqge'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -140,7 +146,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 

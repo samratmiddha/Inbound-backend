@@ -10,7 +10,7 @@ class RoundInfoSerializer(serializers.ModelSerializer):
     student = CandidateContactSerializer()
     panel = InterviewPanelSerializer()
     round = RoundSerializer()
-
+    time_start= serializers.DateTimeField(format="%d-%m-%Y %H:%M:%S")
     class Meta:
         model = Round_Info
         fields = '__all__'
