@@ -76,3 +76,28 @@ class AsyncChatUser(AsyncJsonWebsocketConsumer):
             channel=self.channel_name
         )
         await super().disconnect(code)
+
+class AsyncIMGPanelUser(AsyncJsonWebsocketConsumer):
+    groups=['Panel']
+    async def connect(self):
+        await self.channel_layer.group_add(group='Panel', channel=self.channel_name)
+
+        await self.accept()
+
+
+    async def receive_json(self,text_data,**kwargs):
+        await self.send_json({
+            'data': text_data.get("message"),
+        })
+ 
+    async def echo_message(self, message):
+        await self.send_json({
+            'data': message,
+        })
+
+    async def disconnect(self , code):
+        await self.channel_layer.group_discard(
+            group='Panel',
+            channel=self.channel_name
+        )
+        await super().disconnect(code)

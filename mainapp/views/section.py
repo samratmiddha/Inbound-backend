@@ -127,7 +127,7 @@ class SectionViewSet(viewsets.ModelViewSet):
         section_data=SectionDefaultSerializer(objects,many=True)
         for section in section_data.data:
             print('jjj')
-            columns.append({'field':section['name'] ,'headerName':section['name'],'flex':10,'type':'number','editable':True,'headerClassName':'headers'})
+            columns.append({'field':section['name'] ,'headerName':section['name'],'flex':10,'type':'number','editable':'true','headerClassName':'headers'})
             
         finalData['columns']=columns
 

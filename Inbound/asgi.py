@@ -14,7 +14,7 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
 from channels.security.websocket import AllowedHostsOriginValidator
 from django.urls import re_path
-from mainapp.consumers import AsyncIMGUser,AsyncChatUser
+from mainapp.consumers import AsyncIMGUser,AsyncChatUser,AsyncIMGPanelUser
 
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Inbound.settings')
@@ -29,6 +29,7 @@ application = ProtocolTypeRouter({
             URLRouter([
                 re_path(r"anchor/", AsyncIMGUser.as_asgi()),
                 re_path(r"chat/",AsyncChatUser.as_asgi()),
+                re_path(r"panelws/",AsyncIMGPanelUser.as_asgi()),
             ])
         )
     ),

@@ -14,8 +14,6 @@ from mainapp.serializers import SectionDefaultSerializer
 from mainapp.serializers import QuestionDefaultSerializer
 from mainapp.serializers.round_info import RoundInfoJuniorSerializer
 from mainapp.permissions import FullAccessRoundMarksPermission
-from django.core.mail import send_mail
-from django.conf import settings
 
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
@@ -27,6 +25,8 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404
 import rest_framework.permissions as drf_permissions
 import math
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 
 
@@ -62,7 +62,7 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
         serializer=Serializer(filtered_objects)
         return Response(serializer.data)
 
-
+    
     def create(self, request, format=None):
         serializer = RoundInfoDefaultSerializer(data=request.data)
         if serializer.is_valid():
@@ -230,11 +230,21 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
         return Response(finalData)
 
 
-    @action(methods=['GET'],detail=False,url_name='email',url_path='email')
-    def email(self,request,):
-        subject = 'Thank you for registering to our site'
-        message = ' it  means a world to us '
-        email_from = settings.EMAIL_HOST_USER
-        recipient_list = ['s_middha@me.iitr.ac.in',]
-        send_mail( subject, message, email_from, recipient_list )
-        return Response({'data':'redirect to a new page'})
+    def update(self,request,pk,*args,**kwargs):
+        object = Round_Info.objects.get(pk=pk)
+        serializer=RoundInfoDefaultSerializer(object,data=request.data,partial=True)
+        
+        if serializer.is_valid():
+            serializer.save()
+        else:
+            return Response("wrong parameters")
+        channel_layer=get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+        'Panel',
+        {
+        'type':'echo_message',
+        'message': 'Comment Changed'
+        }
+)
+        return Response(serializer.data)
+
