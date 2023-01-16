@@ -20,7 +20,7 @@ class InterviewPanelViewSet(viewsets.ModelViewSet):
     ordering_fields = ['members', 'season', 'is_active', 'location', 'type']
     filterset_fields = ['members', 'season', 'is_active', 'location', 'type']
     ordering = ['-is_active']
-    permission_classes = [IsAuthenticated,FullAccessPermission|ReadOnly]
+    permission_classes = [IsAuthenticated,FullAccessPermission or ReadOnly]
 
     def get_serializer_class(self):
         if self.action == 'list':

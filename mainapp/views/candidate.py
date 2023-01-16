@@ -45,7 +45,6 @@ class CandidiateViewSet(viewsets.ModelViewSet):
         csv_reader = pandas.read_csv(csv_file)
         candidate_list = []
         for _, row in csv_reader.iterrows():
-            print(row)
             candidate_list.append(
                 Candidate(
                     name=row['name'],

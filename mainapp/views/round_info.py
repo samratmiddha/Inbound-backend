@@ -103,7 +103,7 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
                 sectional_marks_serializer=SectionalMarksDefaultSerializer(data={
                 'student':data['student'],
                 'section':section['id'],
-                'marks':0
+                'marks':None
                 })
                 if sectional_marks_serializer.is_valid():
                     sectional_marks_serializer.save()
@@ -113,7 +113,7 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
                     question_status_serializer =QuestionStatusDefaultSerializer(data={
                     'question':question['id'],
                     'student':data['student'],
-                    'marks':0
+                    'marks':None
                      })
                     if question_status_serializer.is_valid():
                         question_status_serializer.save()
@@ -248,3 +248,15 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
 )
         return Response(serializer.data)
 
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        round_info_serializer=RoundInfoDefaultSerializer(instance)
+        round_id=round_info_serializer.data['round']
+        student_id=round_info_serializer.data['student']
+        sectional_marks_objects=Sectional_Marks.objects.filter(section__round=round_id,student=student_id)
+        question_status_objects=Question_Status.objects.filter(question__section__round=round_id,student=student_id)
+        sectional_marks_objects.delete()
+        question_status_objects.delete()
+        instance.delete()
+
+        return Response(data='successfully deleted')

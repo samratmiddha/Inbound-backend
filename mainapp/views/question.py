@@ -79,4 +79,9 @@ class QuestionViewSet(viewsets.ModelViewSet):
 
  
 
-    
+    @action(methods=['GET'],detail=False,url_path='get_questions_by_asignee/(?P<season_id>\d+)/(?P<user_id>\d+)',url_name='get_questions_by_asignee')
+    def get_questions_by_asignee(self,request,user_id,season_id):
+        queryset = Question.objects.filter(asignee=user_id,section__round__season=season_id)
+        seraializer = QuestionSerializer(queryset,many=True)
+        return Response(seraializer.data)
+

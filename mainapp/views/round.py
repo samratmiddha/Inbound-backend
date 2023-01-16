@@ -17,7 +17,7 @@ class RoundViewSet(viewsets.ModelViewSet):
     ordering_fields = ['name', 'season', 'type', 'start_date', 'end_date']
     filterset_fields = ['name', 'season', 'type', 'start_date', 'end_date']
     ordering = ['name']
-    permission_classes = [IsAuthenticated,FullAccessPermission|ReadOnly]
+    permission_classes = [IsAuthenticated,FullAccessPermission or ReadOnly]
 
     def get_serializer_class(self):
         if self.action == 'list':

@@ -101,5 +101,24 @@ class QuestionStatusViewSet(viewsets.ModelViewSet):
         return Response(response)
         return Response('hii')
 
+    @action(methods=['GET'],detail=False,url_path='get_status_by_question/(?P<question_id>\d+)',url_name='get_status_by_question')
+    def get_status_by_question(self,request,question_id):
+        queryset = Question_Status.objects.filter(question=question_id)
+        seraializer = QuestionStatusSerializer(queryset,many=True)
+        unchecked=[]
+        checked=[]
+        for question_status in seraializer.data:
+            if question_status['marks'] == None:
+                unchecked.append(question_status)
+            else:
+                checked.append(question_status)
+        return Response({"checked":checked , "unchecked":unchecked})
+
+
+
+
+    
+        
+
 
     
