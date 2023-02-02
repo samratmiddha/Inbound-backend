@@ -50,11 +50,14 @@ class QuestionStatusViewSet(viewsets.ModelViewSet):
         question_serializer=QuestionDefaultSerializer(question_object)
 
         sectional_marks_objects=Sectional_Marks.objects.filter(student=serializer.data['student'],section=question_serializer.data['section'])
+        all_sectional_marks_objects=Sectional_Marks.objects.filter(section=question_serializer.data['section'])
         section_object=Section.objects.get(pk=question_serializer.data['section'])
         section_serializer=SectionDefaultSerializer(section_object)
         round_info_objects=Round_Info.objects.filter(student=serializer.data['student'],round=section_serializer.data['round'])
         for object in sectional_marks_objects:
             object.sectional_marks
+        for object in all_sectional_marks_objects:
+            object.normalize
         for round_info_object in round_info_objects:
             round_info_object.marks_obtained
         channel_layer=get_channel_layer()
