@@ -37,8 +37,7 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
     filterset_fields = ['student', 'round', 'panel']
     ordering = ['-_marks_obtained']
     permission_classes = [IsAuthenticated,]
-
-     
+    
 
     def get_serializer_class(self):
         if self.action == 'list' and self.request.user.year>2:
@@ -94,31 +93,34 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
     @action(methods=['POST'],detail=False,url_name='multiple_create/')
     def multiple_create(self,request,*args,**kwargs):
         serializer=self.get_serializer(data=request.data,many=True)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        for data in request.data:
-            section_objects=Section.objects.filter(round=data['round'])
-            section_serializer=SectionDefaultSerializer(section_objects,many=True)
-            for section in section_serializer.data:
-                sectional_marks_serializer=SectionalMarksDefaultSerializer(data={
-                'student':data['student'],
-                'section':section['id'],
-                'marks':None
-                })
-                if sectional_marks_serializer.is_valid():
-                    sectional_marks_serializer.save()
-                question_objects=Question.objects.filter(section=section['id'])
-                question_serializer=QuestionDefaultSerializer(question_objects,many=True)
-                for question in question_serializer.data:
-                    question_status_serializer =QuestionStatusDefaultSerializer(data={
-                    'question':question['id'],
+        try:
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            for data in request.data:
+                section_objects=Section.objects.filter(round=data['round'])
+                section_serializer=SectionDefaultSerializer(section_objects,many=True)
+                for section in section_serializer.data:
+                    sectional_marks_serializer=SectionalMarksDefaultSerializer(data={
                     'student':data['student'],
+                    'section':section['id'],
                     'marks':None
-                     })
-                    if question_status_serializer.is_valid():
-                        question_status_serializer.save()
+                    })
+                    if sectional_marks_serializer.is_valid():
+                        sectional_marks_serializer.save()
+                    question_objects=Question.objects.filter(section=section['id'])
+                    question_serializer=QuestionDefaultSerializer(question_objects,many=True)
+                    for question in question_serializer.data:
+                        question_status_serializer =QuestionStatusDefaultSerializer(data={
+                        'question':question['id'],
+                        'student':data['student'],
+                        'marks':None
+                        })
+                        if question_status_serializer.is_valid():
+                            question_status_serializer.save()
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
+        except:
+            return Response(status.HTTP_400_BAD_REQUEST)
 
-        return Response(serializer.data,status=status.HTTP_201_CREATED)
 
     @action(methods=['GET'],detail=False,url_name='get_marks_by_round',url_path='get_marks_by_round/(?P<round_id>\d+)')
     def get_marks_by_round(self,request,round_id):

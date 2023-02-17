@@ -15,6 +15,7 @@ class Round_Info(models.Model):
     class Meta:
         verbose_name_plural='Round_Info'
         verbose_name='Round_Info'
+        unique_together = ['student', 'round']
 
     def __str__(self):
         return f"{self.student}-{self.round}"
