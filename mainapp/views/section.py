@@ -110,13 +110,22 @@ class SectionViewSet(viewsets.ModelViewSet):
     def get_project_sections(self,request,round_id):
         finalData={}
         columns=[]
+        group={}
+        groups=[]
+        children=[]
+        group['groupId']=1
+        group['headerName']="Sections"
+        group['headerClassName']='headers'
         objects =Section.objects.filter(round=round_id)
         section_data=SectionDefaultSerializer(objects,many=True)
         for section in section_data.data:
             columns.append({'field':section['name'] ,'headerName':section['name'],'flex':10,'type':'number','editable':'true','headerClassName':'headers','hideable':'true'})
-            
+            children.append({'field':section['name']})
+        group["children"]=children
+        groups.append(group)
+        finalData['groups']=groups
         finalData['columns']=columns
-
+       
         return Response(finalData)
 
     

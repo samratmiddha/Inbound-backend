@@ -10,6 +10,7 @@ class Sectional_Marks(models.Model):
     student = models.ForeignKey('Candidate', on_delete=models.CASCADE,related_name='sectional_marks_student')
     marks = models.IntegerField(null=True,blank =True)
     normalized_marks=models.FloatField(blank=True,null=True)
+    comment=models.TextField(blank=True,null=True)
     class Meta:
         verbose_name_plural='Sectional_marks'
 
