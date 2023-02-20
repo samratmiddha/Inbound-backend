@@ -33,15 +33,11 @@ class CandidiateViewSet(viewsets.ModelViewSet):
 
     @action( methods=['POST'],detail=False ,url_name='upload_data_through_file/')
     def upload_data_through_file(self, request,*args,**kwargs):
-        print('yoyo')
         print(self.request.data)
         serializer =  CSVFileSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        print('hii3')
         csv_file = serializer.validated_data['csv_file']
         season_id = self.request.data['seasonId']
-        # file = csv_file.read().decode('utf-8')
-        # csv_reader = csv.reader(io.StringIO(csv_file))  
         csv_reader = pandas.read_csv(csv_file)
         candidate_list = []
         for _, row in csv_reader.iterrows():

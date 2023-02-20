@@ -124,15 +124,12 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
 
     @action(methods=['GET'],detail=False,url_name='get_marks_by_round',url_path='get_marks_by_round/(?P<round_id>\d+)')
     def get_marks_by_round(self,request,round_id):
-        # channel_layer=get_channel_layer()
-        # channel_layer.group_send('IMG',{"msg":'bum bum'})
         filter_field=self.request.query_params.get('filter-field')
         percent=int(self.request.query_params.get('percent'))
         finalData =[]
-        round_objects = Round_Info.objects.filter(round=round_id)
+        round_objects = Round_Info.objects.filter(round=round_id).order_by("student")
         
-        valid_pks= []  # # storage for keys of valid objects
-        # permissions: List[drf_permissions.BasePermission] = self.get_permissions()
+        valid_pks= [] 
         for object in round_objects:
             object.marks_obtained
             if FullAccessRoundMarksPermission.has_object_permission(self,request, object):
@@ -141,19 +138,12 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
         round_filtered_objects=Round_Info.objects.filter(pk__in=valid_pks)  
         count = round_filtered_objects.count()
         required_students=math.floor((percent*count)/100)
-        print('suuuuuuuuuuuuuuuuuuuuuuuuuuuuu')
-        print(required_students)
-        print('suuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu')
         if filter_field=='total_marks':
             round_pfiltered_objects=Round_Info.objects.filter(pk__in=valid_pks).order_by('-_marks_obtained')[:required_students]
         else:
             round_pfiltered_objects = round_filtered_objects
         
         round_data = RoundInfoSerializer(round_pfiltered_objects, many=True)
-        # for object in round_pfiltered_objects:
-        #     print(object.marks_obtained)
-        
-        print(request.user)
         for round in round_data.data:
             section_data={}
             sectional_marks=Sectional_Marks.objects.filter(section__round=round_id, student=round['student']['id'])
@@ -198,12 +188,9 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
 
     @action(methods=['GET'],detail=False,url_name='get_projects_by_round',url_path='get_projects_by_round/(?P<round_id>\d+)')
     def get_projects_by_round(self,request,round_id):
-        # channel_layer=get_channel_layer()
-        # channel_layer.group_send('IMG',{"msg":'bum bum'})
         finalData =[]
         round_objects = Round_Info.objects.filter(round=round_id)
-        valid_pks= []  # # storage for keys of valid objects
-        # permissions: List[drf_permissions.BasePermission] = self.get_permissions()
+        valid_pks= [] 
         for object in round_objects:
             object.marks_obtained
             if FullAccessRoundMarksPermission.has_object_permission(self,request, object):
@@ -211,8 +198,6 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
 
         round_filtered_objects=Round_Info.objects.filter(pk__in=valid_pks)
         round_data = RoundInfoSerializer(round_filtered_objects, many=True)
-
-        print(request.user)
         for round in round_data.data:
             section_data={}
             sectional_marks=Sectional_Marks.objects.filter(section__round=round_id, student=round['student']['id'])

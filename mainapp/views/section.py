@@ -56,9 +56,7 @@ class SectionViewSet(viewsets.ModelViewSet):
         instance =Section.objects.get(pk=pk)
         serializer=SectionDefaultSerializer(instance)
         instance.delete()
-        print('nnnnnnnnnnnnnnnnnnnnnnnn')
         print(serializer.data)
-        print('nnnnnnnnnnnnnnnnnnnnnnnn')
         section_marks_objects=Sectional_Marks.objects.filter(section__round=serializer.data['round'])
         round_info_objects=Round_Info.objects.filter(round=serializer.data['round'])
         for section_marks_object in section_marks_objects:
@@ -81,11 +79,6 @@ class SectionViewSet(viewsets.ModelViewSet):
         finalData={}
         groups=[]
         columns=[]
-        columns.append({'field':'id' ,'headerName':'Id','flex':5,'type':'number','headerClassName':'headers','hideable':'true'})
-        columns.append({'field':'student_name' ,'headerName':'Name','flex':15,'headerClassName':'headers','hideable':'true'})
-        columns.append({'field':'student_id' ,'headerName':'SID','flex':10,'headerClassName':'headers','hideable':'true'})
-        groups.append({'groupId':'internal', 'headerClassName': 'headers','headerName':'Internal','children':[{'field':'id'},{'field':'student_id'},{'field':'student_name'},{'field':'total_marks'}],'hideable':'true'})
-        columns.append({'field':'total_marks' ,'headerName':'Total','flex':10,'type':'number','headerClassName':'headers','hideable':'true'})
         objects =Section.objects.filter(round=round_id)
         section_data=SectionDefaultSerializer(objects,many=True)
         for section in section_data.data:
@@ -117,16 +110,9 @@ class SectionViewSet(viewsets.ModelViewSet):
     def get_project_sections(self,request,round_id):
         finalData={}
         columns=[]
-        columns.append({'field':'id' ,'headerName':'Id','flex':5,'type':'number','headerClassName':'headers','hideable':'true'})
-        columns.append({'field':'student_name' ,'headerName':'Name','flex':15,'headerClassName':'headers','hideable':'true'})
-        columns.append({'field':'student_id' ,'headerName':'SID','flex':10,'headerClassName':'headers','hideable':'true'})
-        columns.append({'field':'total_marks' ,'headerName':'Total','flex':10,'type':'number','headerClassName':'headers','hideable':'true'})
-        columns.append({'field':'submission_link' ,'headerName':'Submission Link','flex':10,'headerClassName':'headers','hideable':'true'})
-        columns.append({'field':'panel' ,'headerName':'Panel','flex':10,'headerClassName':'headers','hideable':'true'})
         objects =Section.objects.filter(round=round_id)
         section_data=SectionDefaultSerializer(objects,many=True)
         for section in section_data.data:
-            print('jjj')
             columns.append({'field':section['name'] ,'headerName':section['name'],'flex':10,'type':'number','editable':'true','headerClassName':'headers','hideable':'true'})
             
         finalData['columns']=columns
