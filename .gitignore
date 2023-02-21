@@ -1,2 +1,2 @@
-/Inbound/.env
-/mainapp/models/__pycache__
+.env
+__pycache__
