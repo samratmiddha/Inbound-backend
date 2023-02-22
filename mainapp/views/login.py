@@ -14,6 +14,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from mainapp.serializers import UserInfoSerializer
 CLIENT_ID = config('CLIENT_ID')
 CLIENT_SECRET = config('CLIENT_SECRET')
+HOST =config('HOST')
 
 
 def auth(username, name, year, email, enrolment_number):
@@ -52,7 +53,7 @@ def check_login(request):
 @authentication_classes([])
 @permission_classes([])
 def login_redirect(request):
-    SITE = f'https://channeli.in/oauth/authorise/?client_id={CLIENT_ID}&redirect_uri=http://localhost:8000/get_oauth_token/'
+    SITE = f'https://channeli.in/oauth/authorise/?client_id={CLIENT_ID}&redirect_uri=https://{HOST}/api/get_oauth_token/'
     return redirect(SITE)
 
 
@@ -66,7 +67,7 @@ def get_token(request):
         "client_id": CLIENT_ID,
         "client_secret": CLIENT_SECRET,
         "grant_type": "authorization_code",
-        "redirect_uri": "http://localhost:8000/get_oauth_token/",
+        "redirect_uri": f"https://{HOST}/api/get_oauth_token/",
         "code": AUTHORISATION_CODE,
     }
 
@@ -107,7 +108,7 @@ def get_token(request):
     else:
         return Response("You are not a member of IMG")
 
-    return redirect('http://localhost:3000/dashboard')
+    return redirect(f'https://{HOST}/dashboard')
 
 
 @api_view(('GET',))
