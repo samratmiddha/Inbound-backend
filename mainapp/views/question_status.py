@@ -54,12 +54,16 @@ class QuestionStatusViewSet(viewsets.ModelViewSet):
         section_object=Section.objects.get(pk=question_serializer.data['section'])
         section_serializer=SectionDefaultSerializer(section_object)
         round_info_objects=Round_Info.objects.filter(student=serializer.data['student'],round=section_serializer.data['round'])
+        all_round_info_objects=Round_Info.objects.filter(round=section_serializer.data['round'])
         for object in sectional_marks_objects:
             object.sectional_marks
         for object in all_sectional_marks_objects:
             object.normalize
         for round_info_object in round_info_objects:
             round_info_object.marks_obtained
+        for round_info_object in all_round_info_objects:
+            round_info_object.normalize
+        
         channel_layer=get_channel_layer()
         async_to_sync(channel_layer.group_send)(
         'IMG',
