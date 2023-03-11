@@ -52,7 +52,13 @@ class AsyncChatUser(AsyncJsonWebsocketConsumer):
 
     
     async def connect(self):
-        await self.channel_layer.group_add(group='Chat',channel=self.channel_name)
+        if self.scope["url_route"]["kwargs"]["room_name"]!= 0:
+            self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
+            self.room_group_name = "chat_%s" % self.room_name
+        else:
+            self.room_name="Chat"
+            self.room_group_name="Chat"
+        await self.channel_layer.group_add(group=self.room_group_name,channel=self.channel_name)
         await self.accept()
 
 
@@ -61,7 +67,7 @@ class AsyncChatUser(AsyncJsonWebsocketConsumer):
             'data':message
         })
     async def receive_json(self,text_data,**kwargs):
-        # print(type text_data)
+        print( text_data)
         text_data['time']=datetime.datetime.now()
         await return_validated_serializer(text_data)
         sender = await return_sender_object(text_data)

@@ -7,3 +7,4 @@ from .season import *
 from .section import *
 from .user import *
 from .chats import *
+from .waitlist import *

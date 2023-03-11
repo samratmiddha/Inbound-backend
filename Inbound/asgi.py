@@ -28,7 +28,7 @@ application = ProtocolTypeRouter({
         AuthMiddlewareStack(
             URLRouter([
                 re_path(r"anchor/", AsyncIMGUser.as_asgi()),
-                re_path(r"chat/",AsyncChatUser.as_asgi()),
+                re_path(r"chat/(?P<room_name>\w+)/$",AsyncChatUser.as_asgi()),
                 re_path(r"panelws/",AsyncIMGPanelUser.as_asgi()),
             ])
         )

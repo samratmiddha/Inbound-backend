@@ -85,7 +85,8 @@ class SectionViewSet(viewsets.ModelViewSet):
             print('jjj')
             group={}
             children=[]
-            columns.append({'field':section['name'] ,'headerName':section['name'],'flex':10,'type':'number','headerClassName':'headers','hideable':'true'})
+            columns.append({'field':section['name'] ,'headerName':section['name'],'flex':10,'type':'number','headerClassName':'headers','hideable':'true', "align": "center",
+      "headerAlign": "center",})
            
             group['groupId']=section['id']
             group['headerName']=section['name']
@@ -94,11 +95,14 @@ class SectionViewSet(viewsets.ModelViewSet):
             question_data =QuestionDefaultSerializer(question_objects,many=True)
             children.append({'field':section['name']})
             for question in question_data.data:
-                columns.append({'field':question['id'] ,'headerName':question['question_name'],'flex':10 ,'editable':True,'type':'number','headerClassName':'headers','hideable':'true'})
+                columns.append({'field':question['id'] ,'headerName':question['question_name'],'flex':10 ,'editable':True,'type':'number','headerClassName':'headers','hideable':'true', "align": "center",
+      "headerAlign": "center",})
                 question_fields={}
                 question_fields['field']=question['id']
                 children.append(question_fields)
             group['children']=children
+            group['align']="center"
+            group["headerAlign"]="center"
             groups.append(group)
         finalData['groups']=groups
         finalData['columns']=columns
@@ -122,6 +126,8 @@ class SectionViewSet(viewsets.ModelViewSet):
             columns.append({'field':section['name'] ,'headerName':section['name'],'flex':10,'type':'number','editable':'true','headerClassName':'headers','hideable':'true'})
             children.append({'field':section['name']})
         group["children"]=children
+        group['align']="center"
+        group["headerAlign"]="center"
         groups.append(group)
         finalData['groups']=groups
         finalData['columns']=columns

@@ -20,7 +20,7 @@ class SectionalMarksViewSet(viewsets.ModelViewSet):
     queryset = Sectional_Marks.objects.all()
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     ordering_fields = ['student', 'section', 'marks']
-    filterset_fields = ['student', 'section', 'marks']
+    filterset_fields = ['student', 'section', 'marks','section__round']
     ordering = ['student']
     permission_classes = [FullAccessSectionalMarksPermission, IsAuthenticated]
     def get_serializer_class(self):
@@ -57,15 +57,4 @@ class SectionalMarksViewSet(viewsets.ModelViewSet):
         else:
             return Response("wrong parameters")
         
-        round_info_objects=Round_Info.objects.filter(round=serializer.data['section']['round']['id'])
-        for round_info_object in round_info_objects:
-            round_info_object.marks_obtained
-        channel_layer=get_channel_layer()
-        async_to_sync(channel_layer.group_send)(
-        'IMG',
-        {
-        'type':'echo_message',
-        'message': 'Test message'
-        }
-)
         return Response(serializer.data)

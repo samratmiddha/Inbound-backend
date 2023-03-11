@@ -43,6 +43,8 @@ admin.site.register(Season)
 admin.site.register(Section)
 
 admin.site.register(Sectional_Marks)
+admin.site.register(Chats)
+admin.site.register(Waitlist)
 
 
 admin.site.register(User,UserAdmin)

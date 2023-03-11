@@ -18,6 +18,7 @@ router.register(r'sections', SectionViewSet)
 router.register(r'sectional_marks', SectionalMarksViewSet)
 router.register(r'round_candidates', RoundInfoViewSet)
 router.register(r'chats',ChatViewSet)
+router.register(r'waitlist',WaitlistViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('get_oauth_token/', get_token),
