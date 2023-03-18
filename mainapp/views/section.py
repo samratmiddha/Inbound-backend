@@ -123,7 +123,8 @@ class SectionViewSet(viewsets.ModelViewSet):
         objects =Section.objects.filter(round=round_id)
         section_data=SectionDefaultSerializer(objects,many=True)
         for section in section_data.data:
-            columns.append({'field':section['name'] ,'headerName':section['name'],'flex':10,'type':'number','editable':'true','headerClassName':'headers','hideable':'true'})
+            columns.append({'field':section['name'] ,'headerName':section['name'],'flex':10,'type':'number','editable':'true','headerClassName':'headers','hideable':'true', "align": "center",
+      "headerAlign": "center",})
             children.append({'field':section['name']})
         group["children"]=children
         group['align']="center"

@@ -6,6 +6,7 @@ class Question(models.Model):
     question_text = models.TextField()
     section = models.ForeignKey('Section', on_delete=models.CASCADE,related_name='question_section')
     asignee = models.ManyToManyField('User',related_name='question_asignees',blank=True)
+    max_marks=models.IntegerField(blank=True,null=True)
 
     class Meta:
         verbose_name_plural='question'

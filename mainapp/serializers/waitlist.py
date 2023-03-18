@@ -17,4 +17,4 @@ class WaitlistSerializer(serializers.ModelSerializer):
     round =  RoundDefaultSerializer()
     class Meta: 
         model=Waitlist
-        fields= ['student','round','season']
+        fields= ['student','round','season','id']

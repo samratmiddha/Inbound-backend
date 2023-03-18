@@ -6,7 +6,6 @@ from ..models.candidate import Candidate
 
 
 class CandidateSerializer(serializers.ModelSerializer):
-    rounds = RoundSerializer(many=True)
     season = SeasonNameSerializer()
 
     class Meta:

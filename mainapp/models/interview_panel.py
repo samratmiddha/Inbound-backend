@@ -10,6 +10,8 @@ class Interview_Panel(models.Model):
     location = models.CharField(max_length=200)
     type=models.CharField(max_length=4,choices=PANEL_TYPE_CHOICES,null=True)
     current_student=models.ForeignKey('Candidate',on_delete=models.CASCADE,null=True,blank=True)
+    current_round=models.ForeignKey('Round',on_delete=models.CASCADE,null=True,blank=True)
+    start_time=models.DateTimeField(blank=True,null=True)
 
     
     class Meta:

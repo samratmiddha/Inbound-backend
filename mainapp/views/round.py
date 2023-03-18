@@ -14,8 +14,8 @@ from mainapp.permissions import ReadOnly,FullAccessPermission
 class RoundViewSet(viewsets.ModelViewSet):
     queryset = Round.objects.all()
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    ordering_fields = ['name', 'season', 'type', 'start_date', 'end_date']
-    filterset_fields = ['name', 'season', 'type', 'start_date', 'end_date']
+    ordering_fields = ['name', 'season', 'type']
+    filterset_fields = ['name', 'season', 'type']
     ordering = ['name']
     permission_classes = [IsAuthenticated,FullAccessPermission | ReadOnly]
 

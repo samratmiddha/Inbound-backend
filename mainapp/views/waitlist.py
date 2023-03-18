@@ -13,7 +13,7 @@ class WaitlistViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     ordering_fields = ['student', 'round', 'season','time']
     filterset_fields = ['student', 'round', 'season']
-    ordering = ['-time']
+    ordering = ['time']
     permission_classes = [IsAuthenticated]
 
     

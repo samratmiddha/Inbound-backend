@@ -1,5 +1,6 @@
 
 from rest_framework import serializers
+from mainapp.serializers.candidate import CandidateDefaultSerializer
 from mainapp.serializers.candidate import CandidateContactSerializer
 from mainapp.serializers.interview_panel import InterviewPanelSerializer
 from mainapp.serializers.round import RoundSerializer
@@ -7,7 +8,7 @@ from ..models.round_info import Round_Info
 
 
 class RoundInfoSerializer(serializers.ModelSerializer):
-    student = CandidateContactSerializer()
+    student = CandidateDefaultSerializer()
     panel = InterviewPanelSerializer()
     round = RoundSerializer()
     time_start= serializers.DateTimeField(format="%d-%m-%Y %H:%M:%S")

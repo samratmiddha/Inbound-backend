@@ -17,8 +17,6 @@ class Candidate(models.Model):
     candidate_from = models.CharField(
         max_length=1, choices=CANDIDATE_FROM_CHOICES)
 
-    rounds = models.ManyToManyField(
-        'Round', through='Round_Info',related_name='candidate_rounds')
 
     class Meta:
         verbose_name_plural='Candidates'

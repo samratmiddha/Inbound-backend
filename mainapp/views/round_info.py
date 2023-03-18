@@ -4,6 +4,7 @@ from mainapp.models import Section
 from mainapp.models import Sectional_Marks
 from mainapp.models import Question_Status
 from mainapp.models import Question
+from mainapp.models import Candidate
 from mainapp.serializers.round_info import RoundInfoSerializer
 from mainapp.serializers.round_info import RoundInfoDefaultSerializer
 from mainapp.serializers.sectional_marks import SectionalMarksSerializer
@@ -12,6 +13,7 @@ from mainapp.serializers.sectional_marks import SectionalMarksDefaultSerializer
 from mainapp.serializers import QuestionStatusDefaultSerializer
 from mainapp.serializers import SectionDefaultSerializer
 from mainapp.serializers import QuestionDefaultSerializer
+from mainapp.serializers import CandidateDefaultSerializer
 from mainapp.serializers.round_info import RoundInfoJuniorSerializer
 from mainapp.permissions import FullAccessRoundMarksPermission
 
@@ -64,31 +66,37 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
     
     def create(self, request, format=None):
         serializer = RoundInfoDefaultSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            section_objects=Section.objects.filter(round=request.data['round'])
-            section_serializer=SectionDefaultSerializer(section_objects,many=True)
-            for section in section_serializer.data:
-                sectional_marks_serializer=SectionalMarksDefaultSerializer(data={
-                'student':request.data['student'],
-                'section':section['id'],
-                'marks':0
-                })
-                if sectional_marks_serializer.is_valid():
-                    sectional_marks_serializer.save()
-                question_objects=Question.objects.filter(section=section['id'])
-                question_serializer=QuestionDefaultSerializer(question_objects,many=True)
-                for question in question_serializer.data:
-                    question_status_serializer =QuestionStatusDefaultSerializer(data={
-                        'question':question['id'],
-                        'student':request.data['student'],
-                        'marks':0
+        student=Candidate.objects.get(pk=request.data["student"])
+        studentSerializer=CandidateDefaultSerializer(student)
+        if  studentSerializer.data["is_exterminated"]:
+            return Response("the student is exterminated")
+        else:
+
+            if serializer.is_valid():
+                serializer.save()
+                section_objects=Section.objects.filter(round=request.data['round'])
+                section_serializer=SectionDefaultSerializer(section_objects,many=True)
+                for section in section_serializer.data:
+                    sectional_marks_serializer=SectionalMarksDefaultSerializer(data={
+                    'student':request.data['student'],
+                    'section':section['id'],
+                    'marks':0
                     })
-                    if question_status_serializer.is_valid():
-                        question_status_serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
- 
+                    if sectional_marks_serializer.is_valid():
+                        sectional_marks_serializer.save()
+                    question_objects=Question.objects.filter(section=section['id'])
+                    question_serializer=QuestionDefaultSerializer(question_objects,many=True)
+                    for question in question_serializer.data:
+                        question_status_serializer =QuestionStatusDefaultSerializer(data={
+                            'question':question['id'],
+                            'student':request.data['student'],
+                            'marks':0
+                        })
+                        if question_status_serializer.is_valid():
+                            question_status_serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 
     @action(methods=['POST'],detail=False,url_name='multiple_create/')
     def multiple_create(self,request,*args,**kwargs):
@@ -149,10 +157,13 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
             sectional_marks=Sectional_Marks.objects.filter(section__round=round_id, student=round['student']['id'])
             include=True
             sectionSerializer=SectionalMarksSerializer(sectional_marks,many=True)
+            print()
             section_data['id']=round['id']
             section_data['student_name']=round['student']['name']
             section_data['student_id']=round['student']['id']
+            section_data['is_exterminated']=round['student']['is_exterminated']
             section_data['total_marks']=round['_marks_obtained']
+
             
             for section in sectionSerializer.data:
                 print(section['id'])
@@ -205,6 +216,7 @@ class RoundInfoViewSet(viewsets.ModelViewSet):
             section_data['id']=round['id']
             section_data['student_name']=round['student']['name']
             section_data['student_id']=round['student']['id']
+            section_data['is_exterminated']=round['student']['is_exterminated']
             section_data['submission_link']=round['submission_link']
             if round['panel'] is not None:
                 section_data['panel']=round['panel']['location']

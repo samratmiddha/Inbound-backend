@@ -48,7 +48,10 @@ class InterviewPanelViewSet(viewsets.ModelViewSet):
         'Panel',
         {
         'type':'echo_message',
-        'message': 'Panel Info Changed'
+        'message': 'Panel Info Changed',
+        'panel':pk,
+        
+
         }
 )
         return Response(serializer.data)
