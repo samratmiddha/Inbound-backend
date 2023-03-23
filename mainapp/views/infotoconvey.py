@@ -41,8 +41,9 @@ class InfoToConveyViewSet(viewsets.ModelViewSet):
     def email(self,request,):
         print(request.data)
         data=request.data
+
         subject = 'IMG Recruitment'
-        message = 'Congratulations you have  been '+data['data']['information']+" and your next round has been scheduled on "+data['data']['DateAndTime']
+        message = 'Congratulations you have  been '+data['data']['information']+" and your next round has been scheduled on "+data['data']['DateAndTime'].strftime()
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [data['data']['email'],]
         send_mail( subject, message, email_from, recipient_list )

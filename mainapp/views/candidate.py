@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from mainapp.models import Candidate
 from mainapp.serializers import CandidateSerializer
 from mainapp.serializers import CandidateDefaultSerializer
+from mainapp.serializers import CandidateContactSerializer
 from mainapp.serializers import CSVFileSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
@@ -25,11 +26,19 @@ class CandidiateViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
-        if self.action == 'list':
-            return CandidateSerializer
-        if self.action == 'retrieve':
-            return CandidateSerializer
-        return CandidateDefaultSerializer
+        print(self.request.user.year)
+        if self.request.user.year>2:
+            if self.action == 'list':
+                return CandidateSerializer
+            if self.action == 'retrieve':
+                return CandidateSerializer
+            return CandidateDefaultSerializer
+        else:
+            if self.action == 'list':
+                return CandidateContactSerializer
+            if self.action == 'retrieve':
+                return CandidateContactSerializer
+            return CandidateDefaultSerializer
 
     @action( methods=['POST'],detail=False ,url_name='upload_data_through_file/')
     def upload_data_through_file(self, request,*args,**kwargs):
@@ -38,9 +47,22 @@ class CandidiateViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         csv_file = serializer.validated_data['csv_file']
         season_id = self.request.data['seasonId']
-        csv_reader = pandas.read_csv(csv_file)
+        csv_reader = pandas.read_csv(csv_file,keep_default_na=False)
         candidate_list = []
         for _, row in csv_reader.iterrows():
+            print("hii")
+            print(row)
+            if(row['CG']==''):
+                row['CG']=None
+            if(row['email']==''):
+                row['email']=None
+            if(row['branch']==''):
+                row['branch']=None
+            if(row['mobile_no']==''):
+                row['mobile_no']=None
+            if(row['enrollment_number']==''):
+                row['enrollment_number']=None
+            
             candidate_list.append(
                 Candidate(
                     name=row['name'],

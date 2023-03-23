@@ -65,6 +65,7 @@ class AsyncChatUser(AsyncJsonWebsocketConsumer):
     async def echo_message(self,message):
         await self.send_json({
             'data':message
+                
         })
     async def receive_json(self,text_data,**kwargs):
         print( text_data)
@@ -72,7 +73,7 @@ class AsyncChatUser(AsyncJsonWebsocketConsumer):
         await return_validated_serializer(text_data)
         sender = await return_sender_object(text_data)
         text_data['sender']=json.dumps(sender)
-        await self.send_json(json.dumps(text_data,indent=4, sort_keys=True, default=str))
+        await self.echo_message(json.dumps(text_data,indent=4, sort_keys=True, default=str))
         
 
    

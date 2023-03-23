@@ -1,6 +1,6 @@
 from mainapp.models.waitlist import Waitlist
 from rest_framework import serializers
-from mainapp.serializers import CandidateDefaultSerializer
+from mainapp.serializers import CandidateContactSerializer
 from mainapp.serializers import RoundDefaultSerializer
 
 
@@ -13,7 +13,7 @@ class WaitlistDefaultSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class WaitlistSerializer(serializers.ModelSerializer):
-    student = CandidateDefaultSerializer()
+    student = CandidateContactSerializer()
     round =  RoundDefaultSerializer()
     class Meta: 
         model=Waitlist

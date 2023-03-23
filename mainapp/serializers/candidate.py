@@ -16,7 +16,7 @@ class CandidateSerializer(serializers.ModelSerializer):
 class CandidateContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = Candidate
-        fields = ['id', 'name', 'mobile_no', 'email']
+        fields = ['id', 'name', 'mobile_no', 'email','enrollment_number','is_exterminated','candidate_from','year']
 
 
 class CandidateNameSerializer(serializers.ModelSerializer):
