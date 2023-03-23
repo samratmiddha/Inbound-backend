@@ -10,12 +10,17 @@ from mainapp.serializers import UserNameSerializer
 def return_validated_serializer(data):
     print('kklllllllll')
     print(data)
+    print("hii13")
     serializer= ChatsDefaultSerializer(data=data)
+    print("hii5")
     if serializer.is_valid():
+        print("hii6")
         serializer.save()
+        print("hii7")
 
 @database_sync_to_async
 def return_sender_object(data):
+    print("hii11")
     sender=User.objects.get(pk=data['sender'])
     serializer= UserNameSerializer(sender)
     return serializer.data
@@ -67,13 +72,24 @@ class AsyncChatUser(AsyncJsonWebsocketConsumer):
             'data':message
                 
         })
-    async def receive_json(self,text_data,**kwargs):
-        print( text_data)
-        text_data['time']=datetime.datetime.now()
-        await return_validated_serializer(text_data)
-        sender = await return_sender_object(text_data)
-        text_data['sender']=json.dumps(sender)
-        await self.echo_message(json.dumps(text_data,indent=4, sort_keys=True, default=str))
+    async def receive_json(self,data,**kwargs):
+        print( data)
+        data['time']=datetime.datetime.now()
+        print("hii0")
+        await return_validated_serializer(data)
+        print("hii9")
+        sender = await return_sender_object(data)
+        print("hii10")
+        data['sender']=json.dumps(sender)
+        print()
+        print("hii12")
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                "type": "echo_message",
+                "message": json.dumps(data, indent=4, sort_keys=True, default=str),
+            },
+        )
         
 
    
